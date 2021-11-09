@@ -15,10 +15,10 @@ const routes = [
   { path: "/user", name: "user", component: User },
 
   { path: "/product", exact: true, name: "Product", component: Product },
-  { path: "/product/detail:id",name: 'Edit', component: ProdcutDetail },
+ 
   { path: "/product/new", name: 'New', component: ProdcutNew },
 
-
+  { path: "/product/edit/:id", exact: true,name: 'Edit', component: ProdcutDetail },
   { path: "/category", name: "category", component: Category },
   { path: "/brand", name: "brand", component: Brand },
   { path: "/", exact: true, name: "Dashboard", component: Dashboard },

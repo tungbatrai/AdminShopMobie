@@ -5,11 +5,13 @@ import { useHistory } from "react-router-dom";
 const Product = () => {
   const array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10];
   const history = useHistory();
-  function handleEdit(id) {
-   //  history.push("/product/detail/" + id);
-  }
+
   function handleNew() {
     history.push("./product/new");
+  }
+  
+  function handleEdit(id) {
+    history.push("./product/edit/" + id);
   }
   return (
     <>
@@ -122,7 +124,8 @@ const Product = () => {
                       <button
                         class="btn btn-dark mx-2"
                         type="submit"
-                        onClick={handleEdit(index)}
+                        // onClick={goEdit(index)}
+                        onClick={() => handleEdit(index) }
                       >
                         Chi tiết
                       </button>
