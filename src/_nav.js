@@ -6,12 +6,14 @@ import {
   cilChartPie,
   cilCursor,
   cilDrop,
+  cilMenu,
   cilNotes,
   cilPencil,
   cilPuzzle,
   cilSpeedometer,
   cilStar,
   cilUser,
+  cilWallpaper,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -36,12 +38,7 @@ const _nav = [
     to: '/user',
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
   },
-  {
-    component: CNavItem,
-    name: 'Product',
-    to: '/product',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
+  
   // {
   //   component: CNavItem,
   //   name: 'Typography',
@@ -51,6 +48,28 @@ const _nav = [
   {
     component: CNavTitle,
     name: 'Components',
+  },
+  {
+    component: CNavItem,
+    name: 'category',
+    to: '/category',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Product',
+    to: '/product',
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavTitle,
+    name: 'QC',
+  },
+  {
+    component: CNavItem,
+    name: 'brand',
+    to: '/brand',
+    icon: <CIcon icon={cilWallpaper} customClassName="nav-icon" />,
   },
   // {
   //   component: CNavItem,
