@@ -17,28 +17,28 @@ const Product = () => {
     <>
       <h3 className="product ">Producty</h3>
       <div className="search container">
-        <form class="d-flex ">
+        <form className="d-flex ">
           <span className="pt-2">
-            <b>O</b> Tổng số phần tử {array.length}
+            <b>O</b> total elements {array.length}
           </span>
           <div className="w-20 mx-5">
-            <select class="form-select " aria-label="Default select example">
+            <select className="form-select " aria-label="Default select example">
               <option selected>ALL</option>
-              <option value="1">Thể loại</option>
-              <option value="2">Tên</option>
-              <option value="3">Ảnh</option>
-              <option value="4">giá </option>
+              <option value="1">Category</option>
+              <option value="2">name</option>
+              <option value="3">image</option>
+              <option value="4">Price </option>
             </select>
           </div>
           <div className="w-20">
             <input
-              class="form-control me-2"
+              className="form-control me-2"
               type="search"
               placeholder="Xin mời nhập"
               aria-label="Search"
             />
           </div>
-          <button class="btn btn-outline-dark mx-2" type="submit">
+          <button className="btn btn-outline-dark mx-2" type="submit">
             Tìm kiếm
           </button>
         </form>
@@ -46,22 +46,22 @@ const Product = () => {
 
       <div id="list" className="mt-5">
         <div className="new mb-3 row">
-          <p className="col-2 mt-2"> Thêm product</p>
-          <button class="btn btn-dark mx-2 col-1" onClick={handleNew}>
+          <p className="col-2 mt-2"> add product</p>
+          <button className="btn btn-dark mx-2 col-1" onClick={handleNew}>
             New
           </button>
         </div>
-        <table class="table table-dark  ">
+        <table className="table table-dark  ">
           <thead>
             <tr className="text-center">
               <th scope="col">#</th>
-              <th scope="col">Tên</th>
-              <th scope="col">Thể loại</th>
-              <th scope="col">Ảnh</th>
-              <th scope="col">giá</th>
-              <th scope="col">Số lượng</th>
-              <th scope="col">Chi tiết</th>
-              <th scope="col">Xóa</th>
+              <th scope="col">name</th>
+              <th scope="col">Category</th>
+              <th scope="col">image</th>
+              <th scope="col">Price</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Detail</th>
+              <th scope="col">Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -122,12 +122,12 @@ const Product = () => {
                       style={{ height: "100px" }}
                     >
                       <button
-                        class="btn btn-dark mx-2"
+                        className="btn btn-dark mx-2"
                         type="submit"
                         // onClick={goEdit(index)}
                         onClick={() => handleEdit(index) }
                       >
-                        Chi tiết
+                        Detail
                       </button>
                     </div>
                   </td>
@@ -136,8 +136,8 @@ const Product = () => {
                       className=" d-flex align-items-center justify-content-center"
                       style={{ height: "100px" }}
                     >
-                      <button class="btn btn-danger mx-2" type="submit">
-                        Xóa
+                      <button className="btn btn-danger mx-2" type="submit">
+                        Delete
                       </button>
                     </div>
                   </td>
