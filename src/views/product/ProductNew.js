@@ -3,10 +3,15 @@ import { useHistory } from "react-router-dom";
 import "../../scss/_custom.scss";
 import { CFormInput, CFormLabel } from "@coreui/react";
 const ProdcutNew = () => {
-  const [image, setImage] = useState([]);
+  const [image, setImage] = useState();
+  const [imageUr, setImageUr] = useState();
   function addPhoto(e) {
     setImage(e.target.files[0].name);
-    console.log("e", e, e.target.files[0].name);
+    //
+    const imgUrl = URL.createObjectURL(e.target.files[0]);
+    setImageUr(imgUrl);
+    // console.log
+    //URL.createObjectURL(e.target.files[0])
   }
   return (
     <>
@@ -45,8 +50,12 @@ const ProdcutNew = () => {
               />
             </button>{" "}
           </div>
-         <div className="col"> <span className="h-100 d-flex align-items-center">{image}</span></div>
+          <div className="col">
+            {" "}
+            <span className="h-100 d-flex align-items-center">{image}</span>
+          </div>
         </div>
+        <img src={imageUr} alt="" />
       </div>
     </>
   );
