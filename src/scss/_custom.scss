@@ -26,6 +26,8 @@
 }
 
 .imageProduct {
-    width: 50%;
-    max-width: 500px;
+    min-width: 100px;
+    min-height: 100px;
+    // max-width: 300px;
+    max-height: 300px;
 }

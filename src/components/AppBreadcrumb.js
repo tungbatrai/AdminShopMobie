@@ -19,7 +19,7 @@ const AppBreadcrumb = () => {
     var breadcrumb = checkBreadcrumb.shift();
     setBreadcrumbNow(checkBreadcrumb[checkBreadcrumb.length - 1].toUpperCase());
     checkBreadcrumb.pop();
-    console.log(checkBreadcrumb, breadcrumbNow);
+
     setDataBreadcrumb(checkBreadcrumb);
   }, [currentLocation]);
 
@@ -66,7 +66,10 @@ const AppBreadcrumb = () => {
             <span key={index}>
               {index === 0 ? (
                 <span>
-                  <NavLink to={`/${item}`}  style={{ textDecoration: 'none' }}><b>{item.toUpperCase()} </b></NavLink> /
+                  <NavLink to={`/${item}`} style={{ textDecoration: "none" }}>
+                    <b>{item.toUpperCase()} </b>
+                  </NavLink>{" "}
+                  /
                   {/* <b  onClick={() => handleMove(item)}>{item.toUpperCase()}</b> /  */}
                 </span>
               ) : (

@@ -22,5 +22,6 @@ const routes = [
   { path: "/category", name: "category", component: Category },
   { path: "/brand", name: "brand", component: Brand },
   { path: "/", exact: true, name: "Dashboard", component: Dashboard },
+  
 ];
 export default routes;
