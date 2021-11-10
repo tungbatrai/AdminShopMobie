@@ -2,6 +2,9 @@
 .width30 {
     width: 30%;
 }
+.width40 {
+    width: 40%;
+}
 .width70 {
     width: 70%;
 }
@@ -20,4 +23,9 @@
     .sidebar:not(.sidebar-end) ~ * {
          --cui-sidebar-occupy-start: 16rem !important; 
     }
+}
+
+.imageProduct {
+    width: 50%;
+    max-width: 500px;
 }

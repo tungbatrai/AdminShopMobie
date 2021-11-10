@@ -13,6 +13,10 @@ const ProdcutNew = () => {
     // console.log
     //URL.createObjectURL(e.target.files[0])
   }
+
+  function handleMainPhotoInput(idx) {
+    document.getElementById(`formFile`).click();
+  }
   return (
     <>
       <div className="prodcutNew"> Product new</div>
@@ -38,16 +42,17 @@ const ProdcutNew = () => {
         <div className=" tableContent width70 row">
           <div className="col-2">
             {" "}
-            <button className="btn btn-dark mx-2 h-75 mt-2">
-              <CFormLabel htmlFor="formFile" className="pt-1 pb-1">
-                Add
-              </CFormLabel>
-              <CFormInput
-                hidden
-                type="file"
-                id="formFile"
-                onChange={(e) => addPhoto(e)}
-              />
+            <CFormInput
+              hidden
+              type="file"
+              id="formFile"
+              onChange={(e) => addPhoto(e)}
+            />
+            <button
+              className="btn btn-dark mx-2 h-75 mt-2"
+              onClick={() => handleMainPhotoInput()}
+            >
+              Add
             </button>{" "}
           </div>
           <div className="col">
@@ -55,7 +60,9 @@ const ProdcutNew = () => {
             <span className="h-100 d-flex align-items-center">{image}</span>
           </div>
         </div>
-        <img src={imageUr} alt="" />
+        <div className="pt-2">
+          <img src={imageUr} alt="" className="imageProduct"/>
+        </div>
       </div>
     </>
   );
