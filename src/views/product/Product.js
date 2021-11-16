@@ -45,8 +45,8 @@ const Product = () => {
       </div>
 
       <div id="list" className="mt-5">
-        <div className="new mb-3 row">
-          <p className="col-2 mt-2"> add product</p>
+        <div className="new mb-3 row mx-0">
+          <p className="col-2 mt-2 " ><b>O add product</b> </p>
           <button className="btn btn-dark mx-2 col-1" onClick={handleNew}>
             New
           </button>
