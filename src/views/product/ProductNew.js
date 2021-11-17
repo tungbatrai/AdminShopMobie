@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 // import "../../scss/_custom.scss";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import {
   CAlert,
   CButton,
@@ -14,13 +14,16 @@ import {
   CFormLabel,
   CFormTextarea,
 } from "@coreui/react";
+const defaultValues = {
+  dataEdit: [],
+};
 const ProdcutNew = () => {
   const {
+    control,
     register,
     formState: { errors },
     handleSubmit,
-    // setvalue,
-    // getvalues,
+    reset,
     setError,
     setValue,
     getValues,
@@ -29,7 +32,7 @@ const ProdcutNew = () => {
   const [image, setImage] = useState();
   const [imageUr, setImageUr] = useState();
   const ListImage = [0, 1, 2, 3];
-  const ListImageSecond = [0, 1, 2];
+
   function addPhoto(e, id) {
     setImage(e.target.files[0].name);
     setValue(`imageType${id}`, e.target.files[0].name);
@@ -69,7 +72,7 @@ const ProdcutNew = () => {
           <select
             id="type"
             className="form-control border-black"
-         
+
             // onChange={handleChange}
           >
             <option value="">Select category</option>
@@ -97,11 +100,96 @@ const ProdcutNew = () => {
         </div>
       </div>
       <span className="input-group-text w-50 mt-4 mb-2">
-        <b>2 &nbsp; Image slide 1 </b>{" "}
+        <b>2 &nbsp;Style color </b>{" "}
       </span>
       <div className="row ">
-        <div className="row pt-1">
-          {ListImage.map((item, index) => {
+        <TypeColorPhone
+          {...{ control, register, getValues, setValue, reset }}
+        />
+      </div>
+      <span className="input-group-text w-50 mt-4 mb-2">
+        <b>3 &nbsp; slide Phone </b>{" "}
+      </span>
+      <div className="row ">
+        <SlideQCMobie {...{ control, register, getValues, setValue, reset }} />
+      </div>
+      <span className="input-group-text w-50 mt-4 mb-2">
+        <b>3 &nbsp;specifications</b>{" "}
+      </span>
+      <Specification />
+      <div className="row my-3">
+        <div className="col-5"></div>
+        <div className="col-2">
+          <NavLink to="/product">
+            <button
+              className="btn btn-dark mx-2 col-1 w-100"
+              //  onClick={(e) => HandleCancel()}
+            >
+              Cancel
+            </button>
+          </NavLink>
+        </div>
+        <div className="col-2">
+          <button
+            className="btn btn-dark mx-2 col-1 w-100"
+            //  onClick={(e) => HandleCancel()}
+            type="submit"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </>
+  );
+};
+
+function TypeColorPhone({ control, getValues, setValue, register, reset }) {
+  const [image, setImage] = useState();
+  const [image2, setImage2] = useState();
+  const { fields, remove, append, prepend, move } = useFieldArray({
+    control,
+    name: `dataEdit`,
+  });
+  useEffect(() => {
+    reset({
+      dataEdit: [
+        {
+          img: "",
+          color: "màu đen",
+        },
+      ],
+    });
+  }, []);
+  useEffect(() => {
+    if (image) {
+      console.log("true", image);
+      setImage();
+    }
+  }, [image, image2]);
+  function handleMainPhotoInput(idx) {
+    console.log(idx);
+    document.getElementById(`formFile${idx}`).click();
+  }
+  function addPhoto(e, id) {
+    setImage(e.target.files[0].name);
+    setValue(`imageType${id}`, e.target.files[0].name);
+    setValue(`imageUrl${id}`, URL.createObjectURL(e.target.files[0]));
+  }
+
+  function handleAddColor() {
+    for (var i = 0; i < 3; i++) {
+      setTimeout(() => console.log(i), 1);
+      // setTimeout(() => console.log(i));
+      //  console.log(i);
+    }
+    append({ img: "" });
+  }
+  return (
+    <>
+      <div className="row pt-1">
+        {fields &&
+          fields.length > 0 &&
+          fields.map((item, index) => {
             return (
               <CCard className="col-5 mt-2 mx-2 " key={index}>
                 <h6 className="mt-3">O image {index}</h6>
@@ -113,19 +201,21 @@ const ProdcutNew = () => {
                     </CAlert>
                   </>
                 )}
+
                 {getValues(`imageUrl${index}`) && (
                   <CCardImage
                     orientation="top"
                     src={getValues(`imageUrl${index}`)}
                     className="imageProduct"
+                    {...register(`imageUrl${index}`, {})}
                   />
                 )}
 
                 <CCardBody>
-                  <CCardTitle>Image {index}</CCardTitle>
+                  {/* <CCardTitle>Image {index} </CCardTitle> */}
 
                   <div className="row">
-                    <div className="col-4">
+                    <div className="col-8">
                       <CFormInput
                         hidden
                         type="file"
@@ -133,80 +223,48 @@ const ProdcutNew = () => {
                         onChange={(e) => addPhoto(e, index)}
                       />
                       <CButton
-                        className="btn btn-dark mx-0 w-100"
+                        className="btn btn-dark mx-0 w-50"
                         onClick={() => handleMainPhotoInput(index)}
                       >
-                        Add
+                        Import image
                       </CButton>
                     </div>
-                    <div className="col-8">
+                    {/* <div className="col-8">
                       {getValues(`imageType${index}`)}
-                      {/* <span className="h-100 d-flex align-items-center"></span> */}
+                    </div> */}
+                  </div>
+                  <div className="row pt-2 mx-0">
+                    <div className="my-2">
+                      {" "}
+                      <b>Type color</b>
                     </div>
+                    <input
+                      className="form-control w-75"
+                      defaultValue={item.color}
+                      // {...register(`dataEdit.${index}.latitude`, {
+                      //   value: getValues(`dataEdit.${index}.latitude`),
+                      // })}
+                    />
                   </div>
                 </CCardBody>
               </CCard>
             );
           })}
-        </div>
       </div>
-      <span className="input-group-text w-50 mt-4 mb-2">
-        <b>3 &nbsp; Image slide 2 </b>{" "}
-      </span>
-      <div className="row ">
-        <div className="row ">
-          {ListImageSecond.map((item, index) => {
-            return (
-              <CCard className="col-5 mt-2 mx-2 " key={index}>
-                <h6 className="mt-3">O image {index}</h6>
-                {!getValues(`imageUrlSecond${index}`) && (
-                  <>
-                    {" "}
-                    <CAlert className="text-center " color="warning ">
-                      No image
-                    </CAlert>
-                  </>
-                )}
-                {getValues(`imageUrlSecond${index}`) && (
-                  <CCardImage
-                    orientation="top"
-                    src={getValues(`imageUrlSecond${index}`)}
-                    className="imageProduct"
-                  />
-                )}
-
-                <CCardBody>
-                  <CCardTitle>Image {index}</CCardTitle>
-
-                  <div className="row">
-                    <div className="col-4">
-                      <CFormInput
-                        hidden
-                        type="file"
-                        id={`formFileSecond${index}`}
-                        onChange={(e) => addPhotoSecond(e, index)}
-                      />
-                      <CButton
-                        className="btn btn-dark mx-0 w-100"
-                        onClick={() => handleMainPhotoInputSecond(index)}
-                      >
-                        Add
-                      </CButton>
-                    </div>
-                    <div className="col-8">
-                      {getValues(`imageSecondType${index}`)}
-                      {/* <span className="h-100 d-flex align-items-center"></span> */}
-                    </div>
-                  </div>
-                </CCardBody>
-              </CCard>
-            );
-          })}
-        </div>
+      <div className="minWidth200">
+        <CButton
+          className="mt-2 btn btn-dark "
+          onClick={() => handleAddColor()}
+        >
+          Add
+        </CButton>
       </div>
-      <span className="input-group-text w-50 mt-4 mb-2">
-        <b>3 &nbsp; Image slide 2 </b>{" "}
-      </span>
+    </>
+  );
+}
+function Specification() {
+  return (
+    <>
       <div className="row pt-2">
         <div className="input-group w-75 pt-2 ">
           <span className="input-group-text width30">Screen </span>
@@ -256,7 +314,7 @@ const ProdcutNew = () => {
           <select
             id="type"
             className="form-control border-black"
-         
+
             // onChange={handleChange}
           >
             <option value="">Select made in</option>
@@ -270,32 +328,73 @@ const ProdcutNew = () => {
           <input type="date" className="form-control" />
         </div>
       </div>
-      <div className="row my-3">
-        <div className="col-5">
-
-        </div>
-        <div className="col-2">
-          <NavLink to="/product">
-            <button
-              className="btn btn-dark mx-2 col-1 w-100"
-              //  onClick={(e) => HandleCancel()}
-            >
-              Cancel
-            </button>
-          </NavLink>
-        </div>
-        <div className="col-2">
-          <button
-            className="btn btn-dark mx-2 col-1 w-100"
-            //  onClick={(e) => HandleCancel()}
-            type="submit"
-          >
-            Submit
-          </button>
-        </div>
-      </div>
     </>
   );
-};
+}
+function SlideQCMobie({ control, getValues, setValue, register, reset }) {
+  const ListImageSecond = [0, 1, 2];
+  const [image, setImage] = useState();
+  const [image2, setImage2] = useState();
 
+  function handleMainPhotoInput(idx) {
+    console.log(idx);
+    document.getElementById(`formFile${idx}`).click();
+  }
+  function addPhoto(e, id) {
+    setImage(e.target.files[0].name);
+    setValue(`imageType${id}`, e.target.files[0].name);
+    setValue(`imageUrl${id}`, URL.createObjectURL(e.target.files[0]));
+  }
+
+  return (
+    <div className="row ">
+      {ListImageSecond.map((item, index) => {
+        return (
+          <CCard className="col-5 mt-2 mx-2 " key={index}>
+            <h6 className="mt-3">O image {index}</h6>
+            {!getValues(`imageUrlSecond${index}`) && (
+              <>
+                {" "}
+                <CAlert className="text-center " color="warning ">
+                  No image
+                </CAlert>
+              </>
+            )}
+            {getValues(`imageUrlSecond${index}`) && (
+              <CCardImage
+                orientation="top"
+                src={getValues(`imageUrlSecond${index}`)}
+                className="imageProduct"
+              />
+            )}
+
+            <CCardBody>
+              <CCardTitle>Image {index}</CCardTitle>
+
+              <div className="row">
+                <div className="col-8">
+                  <CFormInput
+                    hidden
+                    type="file"
+                    id={`formFileSecond${index}`}
+                    onChange={(e) => addPhoto(e, index)}
+                  />
+                  <CButton
+                    className="btn btn-dark mx-0 w-50"
+                    onClick={() => handleMainPhotoInput(index)}
+                  >
+                    Import image
+                  </CButton>
+                </div>
+                <div className="col-8">
+                  {getValues(`imageSecondType${index}`)}
+                </div>
+              </div>
+            </CCardBody>
+          </CCard>
+        );
+      })}
+    </div>
+  );
+}
 export default ProdcutNew;

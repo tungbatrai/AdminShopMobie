@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import PaginationSection from "../../components/common/pagination/pagination";
-import "./user.scss";
 const User = () => {
   const array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10];
   return (
