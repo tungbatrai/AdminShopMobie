@@ -1,12 +1,17 @@
 import React, { useEffect } from "react";
 import "./Category.scss";
 import { useForm, useFieldArray } from "react-hook-form";
+import CIcon from "@coreui/icons-react";
+import { cilAsteriskCircle } from "@coreui/icons";
 const Category = () => {
   return (
     <>
       <h3>List category </h3>
       <div className="row">
         <CategoryPhone />
+      </div>
+      <div>
+        
       </div>
       <div>
         <div className="row">
@@ -47,7 +52,9 @@ function CategoryPhone() {
   }, []);
   return (
     <div className="row">
-      <h6 className="pt-2">Company Name</h6>
+      <h6 className="pt-2">
+        <CIcon icon={cilAsteriskCircle} /> &nbsp;Company Name
+      </h6>
       <form onSubmit={handleSubmit((data) => console.log(data))}>
         <div>
           {fields.map((item, index) => (
@@ -120,7 +127,10 @@ function Company() {
   }, []);
   return (
     <div className="row">
-      <h6 className="pt-2">Category</h6>
+      <h6 className="pt-2">
+        {" "}
+        <CIcon icon={cilAsteriskCircle} /> &nbsp;Category
+      </h6>
       <form onSubmit={handleSubmit((data) => console.log(data))}>
         <div>
           {fields.map((item, index) => (
