@@ -7,6 +7,7 @@ const UserDetai = React.lazy(() => import("./views/user/UserDetail"));
 const Product = React.lazy(() => import("./views/product/Product"));
 const ProdcutDetail = React.lazy(() => import("./views/product/ProductDetail"));
 const ProdcutNew = React.lazy(() => import("./views/product/ProductNew"));
+const StyleProduct = React.lazy(() => import("./views/TypeProduct/TypeProduct"));
 const Category = React.lazy(() => import("./views/category/Category"));
 const Brand = React.lazy(() => import("./views/brand/Brand"));
 // Base
@@ -25,6 +26,12 @@ const routes = [
     exact: true,
     name: "Edit",
     component: ProdcutDetail,
+  },
+  {
+    path: "/product/type-product/:id",
+    exact: true,
+    name: "type Product",
+    component: StyleProduct,
   },
   
   { path: "/category", name: "category", component: Category },

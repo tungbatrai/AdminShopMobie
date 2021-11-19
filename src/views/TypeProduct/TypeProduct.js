@@ -34,6 +34,7 @@ import {
   cilVerticalAlignBottom,
   cilXCircle,
 } from "@coreui/icons";
+
 const defaultValues = {
   dataEdit: {
     MainFeatures: [
@@ -44,7 +45,7 @@ const defaultValues = {
     slidePhone: [{ image: "" }, { image: "" }, { image: "" }, { image: "" }],
   },
 };
-const ProdcutNew = () => {
+const TypeProduct = () => {
   const {
     control,
     register,
@@ -77,82 +78,72 @@ const ProdcutNew = () => {
     setTypeProduct(parseInt(e.target.value));
   }
   return (
-    <div>
-      <form onSubmit={handleSubmit((data) => console.log(data))}>
-        <span className="input-group-text w-50 mb-2">
-          <b>1 &nbsp; Condition and Type </b>
+    <>
+      <div>
+        {" "}
+        {/* Type  */}
+        <span className="input-group-text w-50 mt-4 mb-2">
+          <b>2 &nbsp;Type Product </b>
+        </span>
+        <div className="row pt-2 ml-1 w-50">
+          <select
+            id="type"
+            className="form-control border-black"
+            onChange={(e) => handleSelectType(e)}
+          >
+            <option value="0">Select type prodcut</option>
+            <option value="1">Điện thoại</option>
+            <option value="2">Máy tính</option>
+            <option value="3"> Đồng hồ</option>
+            <option value="4">other</option>
+          </select>
+        </div>
+        <span className="input-group-text w-50 mt-4 mb-2">
+          <b>2 &nbsp;Style color </b>
         </span>
         <div className="row ">
-          <div className="input-group width85 pt-2 h60p">
-            <span className="input-group-text width30">Name </span>
-            <input type="text" className="form-control" />
-          </div>
-          <div className="input-group width85 pt-2 h60p">
-            <span className="input-group-text width30">Company name </span>
-            <select
-              id="type"
-              className="form-control border-black"
-
-              // onChange={handleChange}
-            >
-              <option value="">Select category</option>
-              <option value="SAMSUNG">SamSung</option>
-              <option value="LG">LG</option>
-              <option value="IPHONE"> Iphone</option>
-              <option value="BKAV"> Bkav</option>
-              <option value="VIN"> VIN</option>
-              <option value="XIHAOMI"> XIHAOMI</option>
-            </select>
-            {/* <input type="text"  className="form-control" /> */}
-          </div>
-          <div className="input-group width85  pt-2 h60p">
-            <span className="input-group-text width30">Title </span>
-            <input type="text" className="form-control" />
-          </div>
-          <div className="input-group width85 mb-1 pt-2 h60p">
-            <span className="input-group-text width30">image </span>
-            <span className="input-group-text width70">
-              <div className="col-4">
-                <CFormInput
-                  hidden
-                  type="file"
-                  id={`addImage`}
-                  onChange={(e) => addPhoto(e)}
-                />
-                <CButton
-                  className="btn btn-dark mx-0 w-100"
-                  onClick={() => handleMainPhotoInput()}
-                >
-                  <CIcon icon={cilVerticalAlignBottom} /> &nbsp; Import image
-                </CButton>
-              </div>
-              <div className="col-8">
-                <div className=" px-3  d-flex justify-content-left align-items-center h-100">
-                  <p className=" d-flex  align-items-center h-100 mb-0">
-                    {image}
-                  </p>
-                </div>
-              </div>
-            </span>
-          </div>
-          <div className="input-group width85 pt-2 ">
-            <span className="input-group-text width30">Content </span>
-            {/* <input type="number" className="form-control" /> */}
-            <CFormTextarea
-              placeholder=" You can comment here"
-              style={{ height: "100px", minHeight: "70px" }}
-            ></CFormTextarea>
-          </div>
+          <TypeColorPhone
+            {...{ control, register, getValues, setValue, reset }}
+          />
         </div>
-        {/* <span className="input-group-text w-50 mt-4 mb-2">
-          <b>2 &nbsp;Memory type </b>
-        </span> */}
+        <span className="input-group-text w-50 mt-4 mb-2">
+          <b>3 &nbsp; slide Phone </b>
+        </span>
         <div className="row ">
-          {/* <Memorytype {...{ control, register, getValues, setValue, reset }} /> */}
+          <SlideQCMobie
+            {...{ control, register, getValues, setValue, reset }}
+          />
         </div>
-        
-      </form>
-    </div>
+        {typeProduct != 0 && (
+          <span className="input-group-text w-50 mt-4 mb-2">
+            <b>3 &nbsp;specifications</b>
+          </span>
+        )}
+        <Specification typeProduct={typeProduct} />
+        <div className="row my-3">
+          <div className="col-5"></div>
+          <div className="col-2">
+            <NavLink to="/product">
+              <button
+                className="btn btn-dark mx-2 col-1 w-100"
+                //  onClick={(e) => HandleCancel()}
+              >
+                <CIcon icon={cilHistory} /> Cancel
+              </button>
+            </NavLink>
+          </div>
+          <div className="col-2">
+            <button
+              className="btn btn-dark mx-2 col-1 w-100"
+              //  onClick={(e) => HandleCancel()}
+              type="submit"
+            >
+              <CIcon icon={cilCloudUpload} /> Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 
@@ -664,4 +655,5 @@ function SlideQCMobie({ control, getValues, setValue, register, reset }) {
     </div>
   );
 }
-export default ProdcutNew;
+
+export default TypeProduct;
