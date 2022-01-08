@@ -150,7 +150,6 @@ const ProdcutNew = () => {
         <div className="row ">
           {/* <Memorytype {...{ control, register, getValues, setValue, reset }} /> */}
         </div>
-        
       </form>
     </div>
   );

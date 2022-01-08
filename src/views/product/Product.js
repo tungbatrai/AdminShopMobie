@@ -2,7 +2,12 @@ import React from "react";
 import PaginationSection from "../../components/common/pagination/pagination";
 import { useHistory } from "react-router-dom";
 import CIcon from "@coreui/icons-react";
-import { cilColorBorder, cilDelete, cilLibraryAdd, cilLifeRing } from "@coreui/icons";
+import {
+  cilColorBorder,
+  cilDelete,
+  cilLibraryAdd,
+  cilLifeRing,
+} from "@coreui/icons";
 const Product = () => {
   const array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10];
   const history = useHistory();
@@ -153,7 +158,7 @@ const Product = () => {
                         // onClick={goEdit(index)}
                         onClick={() => handleEdit(index)}
                       >
-                        <CIcon icon={cilColorBorder} />  Detail
+                        <CIcon icon={cilColorBorder} /> Detail
                       </button>
                     </div>
                   </td>
@@ -163,7 +168,7 @@ const Product = () => {
                       style={{ height: "100px" }}
                     >
                       <button className="btn btn-danger mx-2" type="submit">
-                      <CIcon icon={cilDelete} /> Delete
+                        <CIcon icon={cilDelete} /> Delete
                       </button>
                     </div>
                   </td>

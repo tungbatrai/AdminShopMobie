@@ -1,4 +1,9 @@
-import { cilColorBorder, cilDelete, cilLibraryAdd, cilLifeRing } from "@coreui/icons";
+import {
+  cilColorBorder,
+  cilDelete,
+  cilLibraryAdd,
+  cilLifeRing,
+} from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
@@ -12,14 +17,15 @@ const TypeProduct = () => {
   }
 
   function handleEdit(id) {
-    history.push("./product/edit/" + id);
+    // history.push("./product/edit/" + id);
+    history.push("./detail/" + id);
   }
   function handleStyleProduct(id) {
     history.push("./product/type-product/" + id);
   }
   return (
     <>
-       <h3 className="product ">Producty</h3>
+      <h3 className="product ">Type Product</h3>
       <div className="search container">
         <form className="d-flex ">
           <span className="pt-2">
@@ -74,10 +80,9 @@ const TypeProduct = () => {
             <tr className="text-center">
               <th scope="col">#</th>
               <th scope="col">name</th>
-              <th scope="col">Category</th>
-              <th scope="col">title</th>
-              <th scope="col">image</th>
-              <th scope="col">TypeProduct</th>
+              <th scope="col">Color</th>
+              <th scope="col">Create date</th>
+              <th scope="col">End date</th>
               <th scope="col">Detail</th>
               <th scope="col">Delete</th>
             </tr>
@@ -99,7 +104,7 @@ const TypeProduct = () => {
                       className=" d-flex align-items-center justify-content-center"
                       style={{ height: "100px" }}
                     >
-                      user {item}
+                      {item}
                     </div>
                   </td>
                   <td>
@@ -107,7 +112,7 @@ const TypeProduct = () => {
                       className=" d-flex align-items-center justify-content-center"
                       style={{ height: "100px" }}
                     >
-                      Iphone {item}
+                      blue  
                     </div>
                   </td>
 
@@ -116,30 +121,15 @@ const TypeProduct = () => {
                       className=" d-flex align-items-center justify-content-center"
                       style={{ height: "100px" }}
                     >
-                      3{item}00
+                      20/{item}/2021
                     </div>
-                  </td>
-                  <td>
-                    <img
-                      src="https://apl-mintpot.s3.ap-northeast-2.amazonaws.com/1637048317098___abc.jpg"
-                      className="w-100"
-                      style={{ maxWidth: "200px", height: "100px" }}
-                      alt=""
-                    />
                   </td>
                   <td>
                     <div
                       className=" d-flex align-items-center justify-content-center"
                       style={{ height: "100px" }}
                     >
-                      <button
-                        className="btn btn-dark mx-2"
-                        type="submit"
-                        // onClick={goEdit(index)}
-                       // onClick={() => handleStyleProduct(index)}
-                      >
-                        <CIcon icon={cilColorBorder} /> Detail
-                      </button>
+                      15/{item + 1}/2021
                     </div>
                   </td>
                   <td style={{ width: "10%", minWidth: "130px" }}>
@@ -151,9 +141,9 @@ const TypeProduct = () => {
                         className="btn btn-dark mx-2"
                         type="submit"
                         // onClick={goEdit(index)}
-                      //  onClick={() => handleEdit(index)}
+                        onClick={() => handleEdit(index)}
                       >
-                        <CIcon icon={cilColorBorder} />  Detail
+                        <CIcon icon={cilColorBorder} /> Detail
                       </button>
                     </div>
                   </td>
@@ -163,7 +153,7 @@ const TypeProduct = () => {
                       style={{ height: "100px" }}
                     >
                       <button className="btn btn-danger mx-2" type="submit">
-                      <CIcon icon={cilDelete} /> Delete
+                        <CIcon icon={cilDelete} /> Delete
                       </button>
                     </div>
                   </td>
@@ -190,6 +180,5 @@ const TypeProduct = () => {
     </>
   );
 };
-
 
 export default TypeProduct;

@@ -8,6 +8,7 @@ const Product = React.lazy(() => import("./views/product/Product"));
 const ProdcutDetail = React.lazy(() => import("./views/product/ProductDetail"));
 const ProdcutNew = React.lazy(() => import("./views/product/ProductNew"));
 const StyleProduct = React.lazy(() => import("./views/TypeProduct/TypeProduct"));
+const StyleProductDetail = React.lazy(() => import("./views/TypeProduct/TypeProductDetail"));
 const Category = React.lazy(() => import("./views/category/Category"));
 const Brand = React.lazy(() => import("./views/brand/Brand"));
 // Base
@@ -33,9 +34,16 @@ const routes = [
     name: "type Product",
     component: StyleProduct,
   },
-  
+  {
+    path: "/product/type-product/detail/:id",
+    exact: true,
+    name: "type Product",
+    component: StyleProductDetail,
+  },
   { path: "/category", name: "category", component: Category },
   { path: "/brand", name: "brand", component: Brand },
   { path: "/", exact: true, name: "Dashboard", component: Dashboard },
+  { path: "*", exact: true, name: "Dashboard", component: Dashboard },
+  
 ];
 export default routes;

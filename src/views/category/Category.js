@@ -3,7 +3,15 @@ import "./Category.scss";
 import { useForm, useFieldArray } from "react-hook-form";
 import CIcon from "@coreui/icons-react";
 import { cilAsteriskCircle } from "@coreui/icons";
-import { CCol, CContainer, CForm, CFormInput, CFormLabel, CFormTextarea, CRow } from "@coreui/react";
+import {
+  CCol,
+  CContainer,
+  CForm,
+  CFormInput,
+  CFormLabel,
+  CFormTextarea,
+  CRow,
+} from "@coreui/react";
 const Category = () => {
   return (
     <>
@@ -11,9 +19,7 @@ const Category = () => {
       <div className="row">
         <CategoryPhone />
       </div>
-      <div>
-        
-      </div>
+      <div></div>
       <div>
         <div className="row">
           <Company />
@@ -58,16 +64,6 @@ function CategoryPhone() {
       </h6>
       <CForm onSubmit={handleSubmit((data) => console.log(data))}>
         <div>
-        <CForm>
-  <div className="mb-3">
-    <CFormLabel htmlFor="exampleFormControlInput1">Email address</CFormLabel>
-    <CFormInput type="email" id="exampleFormControlInput1" placeholder="name@example.com"   {...register(`test.name`)} />
-  </div>
-  <div className="mb-3">
-    <CFormLabel htmlFor="exampleFormControlTextarea1">Example textarea</CFormLabel>
-    <CFormTextarea id="exampleFormControlTextarea1" rows="3"   {...register(`test.textAreaA`)} ></CFormTextarea>
-  </div>
-</CForm>
           {fields.map((item, index) => (
             <div key={item.id} className="row pt-3">
               <div className="col-6">
@@ -75,7 +71,6 @@ function CategoryPhone() {
                   className="form-control "
                   {...register(`dataEdit.${index}.name`)}
                 />
-     
               </div>
 
               <div className="col-6">
