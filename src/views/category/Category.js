@@ -3,6 +3,7 @@ import "./Category.scss";
 import { useForm, useFieldArray } from "react-hook-form";
 import CIcon from "@coreui/icons-react";
 import { cilAsteriskCircle } from "@coreui/icons";
+import { CCol, CContainer, CForm, CFormInput, CFormLabel, CFormTextarea, CRow } from "@coreui/react";
 const Category = () => {
   return (
     <>
@@ -55,8 +56,18 @@ function CategoryPhone() {
       <h6 className="pt-2">
         <CIcon icon={cilAsteriskCircle} /> &nbsp;Company Name
       </h6>
-      <form onSubmit={handleSubmit((data) => console.log(data))}>
+      <CForm onSubmit={handleSubmit((data) => console.log(data))}>
         <div>
+        <CForm>
+  <div className="mb-3">
+    <CFormLabel htmlFor="exampleFormControlInput1">Email address</CFormLabel>
+    <CFormInput type="email" id="exampleFormControlInput1" placeholder="name@example.com"   {...register(`test.name`)} />
+  </div>
+  <div className="mb-3">
+    <CFormLabel htmlFor="exampleFormControlTextarea1">Example textarea</CFormLabel>
+    <CFormTextarea id="exampleFormControlTextarea1" rows="3"   {...register(`test.textAreaA`)} ></CFormTextarea>
+  </div>
+</CForm>
           {fields.map((item, index) => (
             <div key={item.id} className="row pt-3">
               <div className="col-6">
@@ -64,6 +75,7 @@ function CategoryPhone() {
                   className="form-control "
                   {...register(`dataEdit.${index}.name`)}
                 />
+     
               </div>
 
               <div className="col-6">
@@ -93,7 +105,7 @@ function CategoryPhone() {
             <input type="submit" className="btn btn-dark" />
           </div>
         </div>
-      </form>
+      </CForm>
     </div>
   );
 }

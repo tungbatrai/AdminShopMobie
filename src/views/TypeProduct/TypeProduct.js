@@ -1,659 +1,195 @@
-import React, { useState, useEffect } from "react";
-import { NavLink, useHistory } from "react-router-dom";
-// import "../../scss/_custom.scss";
-import { useFieldArray, useForm } from "react-hook-form";
-import ImageUploading from "react-images-uploading";
-import {
-  CAlert,
-  CButton,
-  CCard,
-  CCardBody,
-  CCardImage,
-  CCardText,
-  CCardTitle,
-  CCol,
-  CFormFloating,
-  CFormInput,
-  CFormLabel,
-  CFormTextarea,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CRow,
-} from "@coreui/react";
+import { cilColorBorder, cilDelete, cilLibraryAdd, cilLifeRing } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
-import {
-  cilCloudUpload,
-  cilColorPalette,
-  cilHistory,
-  cilLibraryAdd,
-  cilMemory,
-  cilTerrain,
-  cilVerticalAlignBottom,
-  cilXCircle,
-} from "@coreui/icons";
-
-const defaultValues = {
-  dataEdit: {
-    MainFeatures: [
-      { name: "", category: "", title: "", image: "", content: "" },
-    ],
-    memorytype: [{ memory: "memory", price: "10000" }],
-    styleColor: [{ image: "memory", color: "10000" }],
-    slidePhone: [{ image: "" }, { image: "" }, { image: "" }, { image: "" }],
-  },
-};
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import PaginationSection from "../../components/common/pagination/pagination";
 const TypeProduct = () => {
-  const {
-    control,
-    register,
-    formState: { errors },
-    handleSubmit,
-    reset,
-    setError,
-    setValue,
-    getValues,
-  } = useForm();
+  const array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10];
   const history = useHistory();
-  const [image, setImage] = useState();
-  const [typeProduct, setTypeProduct] = useState(0);
-  const [imageUr, setImageUr] = useState();
-  const ListImage = [0, 1, 2, 3];
 
-  function addPhoto(e, id) {
-    setImage(e.target.files[0].name);
-    setValue(`imageTitleType`, e.target.files[0].name);
-    setValue(`imageUrl`, URL.createObjectURL(e.target.files[0]));
-    const imgUrl = URL.createObjectURL(e.target.files[0]);
-    console.log(e.target.files[0].name);
+  function handleNew() {
+    history.push("./product/new");
   }
 
-  function handleMainPhotoInput() {
-    document.getElementById(`addImage`).click();
+  function handleEdit(id) {
+    history.push("./product/edit/" + id);
   }
-  function handleSelectType(e) {
-    console.log(parseInt(e.target.value));
-    setTypeProduct(parseInt(e.target.value));
+  function handleStyleProduct(id) {
+    history.push("./product/type-product/" + id);
   }
   return (
     <>
-      <div>
-        {" "}
-        {/* Type  */}
-        <span className="input-group-text w-50 mt-4 mb-2">
-          <b>2 &nbsp;Type Product </b>
-        </span>
-        <div className="row pt-2 ml-1 w-50">
-          <select
-            id="type"
-            className="form-control border-black"
-            onChange={(e) => handleSelectType(e)}
-          >
-            <option value="0">Select type prodcut</option>
-            <option value="1">Điện thoại</option>
-            <option value="2">Máy tính</option>
-            <option value="3"> Đồng hồ</option>
-            <option value="4">other</option>
-          </select>
-        </div>
-        <span className="input-group-text w-50 mt-4 mb-2">
-          <b>2 &nbsp;Style color </b>
-        </span>
-        <div className="row ">
-          <TypeColorPhone
-            {...{ control, register, getValues, setValue, reset }}
-          />
-        </div>
-        <span className="input-group-text w-50 mt-4 mb-2">
-          <b>3 &nbsp; slide Phone </b>
-        </span>
-        <div className="row ">
-          <SlideQCMobie
-            {...{ control, register, getValues, setValue, reset }}
-          />
-        </div>
-        {typeProduct != 0 && (
-          <span className="input-group-text w-50 mt-4 mb-2">
-            <b>3 &nbsp;specifications</b>
+       <h3 className="product ">Producty</h3>
+      <div className="search container">
+        <form className="d-flex ">
+          <span className="pt-2">
+            <CIcon icon={cilLifeRing} /> total elements {array.length}
           </span>
-        )}
-        <Specification typeProduct={typeProduct} />
-        <div className="row my-3">
-          <div className="col-5"></div>
-          <div className="col-2">
-            <NavLink to="/product">
-              <button
-                className="btn btn-dark mx-2 col-1 w-100"
-                //  onClick={(e) => HandleCancel()}
-              >
-                <CIcon icon={cilHistory} /> Cancel
-              </button>
-            </NavLink>
-          </div>
-          <div className="col-2">
-            <button
-              className="btn btn-dark mx-2 col-1 w-100"
-              //  onClick={(e) => HandleCancel()}
-              type="submit"
+          <div className="w-20 mx-5">
+            <select
+              className="form-select "
+              aria-label="Default select example"
             >
-              <CIcon icon={cilCloudUpload} /> Submit
-            </button>
+              <option selected>ALL</option>
+              <option value="1">Category</option>
+              <option value="2">name</option>
+              <option value="3">image</option>
+              <option value="4">Price </option>
+            </select>
           </div>
+          <div className="w-20">
+            <input
+              className="form-control me-2"
+              type="search"
+              placeholder="Xin mời nhập"
+              aria-label="Search"
+            />
+          </div>
+          <button className="btn btn-outline-dark mx-2" type="submit">
+            Tìm kiếm
+          </button>
+        </form>
+      </div>
+
+      <div id="list" className="mt-5">
+        <div className="new mb-3 row mx-0">
+          <p className="col-2 mt-2 ">
+            <b>
+              <CIcon icon={cilLifeRing} /> Add product
+            </b>
+          </p>
+          <button className="btn btn-dark mx-2 col-2" onClick={handleNew}>
+            <CIcon icon={cilLibraryAdd} /> Add type product
+          </button>
         </div>
+        <div className="new  row mx-0">
+          <p className="col-2 mt-2 ">
+            <b>
+              <CIcon icon={cilLifeRing} /> Table
+            </b>
+          </p>
+        </div>
+        <table className="table table-dark  ">
+          <thead>
+            <tr className="text-center">
+              <th scope="col">#</th>
+              <th scope="col">name</th>
+              <th scope="col">Category</th>
+              <th scope="col">title</th>
+              <th scope="col">image</th>
+              <th scope="col">TypeProduct</th>
+              <th scope="col">Detail</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {array.map((item, index) => {
+              return (
+                <tr className="text-center" key={index}>
+                  <th scope="row">
+                    <div
+                      className=" d-flex align-items-center justify-content-center"
+                      style={{ height: "100px" }}
+                    >
+                      {item}
+                    </div>
+                  </th>
+                  <td className="h-100">
+                    <div
+                      className=" d-flex align-items-center justify-content-center"
+                      style={{ height: "100px" }}
+                    >
+                      user {item}
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      className=" d-flex align-items-center justify-content-center"
+                      style={{ height: "100px" }}
+                    >
+                      Iphone {item}
+                    </div>
+                  </td>
+
+                  <td>
+                    <div
+                      className=" d-flex align-items-center justify-content-center"
+                      style={{ height: "100px" }}
+                    >
+                      3{item}00
+                    </div>
+                  </td>
+                  <td>
+                    <img
+                      src="https://apl-mintpot.s3.ap-northeast-2.amazonaws.com/1637048317098___abc.jpg"
+                      className="w-100"
+                      style={{ maxWidth: "200px", height: "100px" }}
+                      alt=""
+                    />
+                  </td>
+                  <td>
+                    <div
+                      className=" d-flex align-items-center justify-content-center"
+                      style={{ height: "100px" }}
+                    >
+                      <button
+                        className="btn btn-dark mx-2"
+                        type="submit"
+                        // onClick={goEdit(index)}
+                       // onClick={() => handleStyleProduct(index)}
+                      >
+                        <CIcon icon={cilColorBorder} /> Detail
+                      </button>
+                    </div>
+                  </td>
+                  <td style={{ width: "10%", minWidth: "130px" }}>
+                    <div
+                      className=" d-flex align-items-center justify-content-center"
+                      style={{ height: "100px" }}
+                    >
+                      <button
+                        className="btn btn-dark mx-2"
+                        type="submit"
+                        // onClick={goEdit(index)}
+                      //  onClick={() => handleEdit(index)}
+                      >
+                        <CIcon icon={cilColorBorder} />  Detail
+                      </button>
+                    </div>
+                  </td>
+                  <td style={{ width: "5%", minWidth: "50px" }}>
+                    <div
+                      className=" d-flex align-items-center justify-content-center minWidth120"
+                      style={{ height: "100px" }}
+                    >
+                      <button className="btn btn-danger mx-2" type="submit">
+                      <CIcon icon={cilDelete} /> Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+            {/* <PaginationSection
+                size={dataFill.pageable.pageSize}
+                number={data.currentPage}
+                totalElements={data.totalElements}
+                handlePaging={handlePaging}
+              /> */}
+          </tbody>
+        </table>
+      </div>
+      <div className="d-flex justify-content-center">
+        <PaginationSection
+          size="1"
+          number="2"
+          totalElements="3"
+          handlePaging="4"
+        />
       </div>
     </>
   );
 };
 
-function TypeColorPhone({ control, getValues, setValue, register, reset }) {
-  const [image, setImage] = useState();
-  const [image2, setImage2] = useState();
-  const { fields, remove, append, prepend, move } = useFieldArray({
-    control,
-    name: `dataEdit.styleColor`,
-  });
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    // reset({
-    //   dataEdit: [
-    //     {
-    //       img: "",
-    //       color: "màu đen",
-    //     },
-    //   ],
-    // });
-  }, []);
-  useEffect(() => {
-    if (image) {
-      console.log("true", image);
-      setImage();
-    }
-  }, [image]);
-  function handleMainPhotoInput(idx) {
-    console.log(idx);
-    document.getElementById(`formFile${idx}`).click();
-  }
-  function addPhoto(e, id) {
-    setImage(e.target.files[0].name);
-    setValue(`imageType${id}`, e.target.files[0].name);
-    setValue(`imageUrl${id}`, URL.createObjectURL(e.target.files[0]));
-  }
-
-  function handleAddColor() {
-    append({ img: "", memory: " 512", price: "10000" });
-  }
-  return (
-    <>
-      <div className="minWidth200">
-        <CButton
-          className="mt-2 btn btn-dark  width15"
-          onClick={() => handleAddColor()}
-        >
-          <CIcon icon={cilLibraryAdd} /> &nbsp; Add Style
-        </CButton>
-      </div>
-      <div className="row pt-1">
-        {fields &&
-          fields.length > 0 &&
-          fields.map((item, index) => {
-            return (
-              <CCard className="col-3 mt-2 mx-2 " key={index}>
-                <h6 className="mt-3">
-                  <CIcon icon={cilMemory} /> &nbsp;Memory {index}
-                </h6>
-
-                <CCardBody>
-                  {/* <CCardTitle>Image {index} </CCardTitle> */}
-                  <CRow className="align-items-start">
-                    <CCol>
-                      <CFormFloating className="mb-3">
-                        <CFormInput
-                          type="text"
-                          id="floatingInput"
-                          placeholder="Memory"
-                          defaultValue={item.memory}
-                          {...register(`dataEdit.type.${index}.memory`, {
-                            //  value: getValues(`dataEdit.latitude.${index}`),
-                          })}
-                        />
-                        <CFormLabel htmlFor="floatingInput">Memory</CFormLabel>
-                      </CFormFloating>
-                    </CCol>
-
-                    <CCol>
-                      <CFormFloating className="mb-3">
-                        <CFormInput
-                          type="number"
-                          id="floatingInput"
-                          placeholder="price"
-                          defaultValue={item.price}
-                          {...register(`dataEdit.type.${index}.price`, {
-                            //  value: getValues(`dataEdit.${index}.latitude`),
-                          })}
-                        />
-                        <CFormLabel htmlFor="floatingInput">Price</CFormLabel>
-                      </CFormFloating>
-                    </CCol>
-                  </CRow>
-                  <div className="row pt-2 mx-0">
-                    <CFormFloating className="mb-3 px-0">
-                      <CFormInput
-                        type="text"
-                        id="floatingInput"
-                        placeholder="color"
-                        defaultValue={item.color}
-                        {...register(`dataEdit.type.${index}.color`, {
-                          //  value: getValues(`dataEdit.latitude.${index}`),
-                        })}
-                      />
-                      <CFormLabel htmlFor="floatingInput">
-                        Type color
-                      </CFormLabel>
-                    </CFormFloating>
-                  </div>
-
-                  {/* <div className="col-8">
-                      {getValues(`imageType${index}`)}
-                    </div> */}
-                </CCardBody>
-                <h6 className="mt-3">
-                  <CIcon icon={cilColorPalette} /> &nbsp; image {index}
-                </h6>
-                {!getValues(`imageUrl${index}`) && (
-                  <>
-                    <CAlert className="text-center " color="warning ">
-                      No image
-                    </CAlert>
-                  </>
-                )}
-
-                {getValues(`imageUrl${index}`) && (
-                  <CCardImage
-                    orientation="top"
-                    src={getValues(`imageUrl${index}`)}
-                    className="imageProduct w-25"
-                    {...register(`imageUrl${index}`, {})}
-                    onClick={() => setVisible(true)}
-                  />
-                )}
-                <CCardBody>
-                  {/* <CCardTitle>Image {index} </CCardTitle> */}
-                  <div className="row">
-                    <div className="col-8">
-                      <CFormInput
-                        hidden
-                        type="file"
-                        id={`formFile${index}`}
-                        onChange={(e) => addPhoto(e, index)}
-                      />
-                      <CButton
-                        className="btn btn-dark mx-0 "
-                        onClick={() => handleMainPhotoInput(index)}
-                      >
-                        <CIcon icon={cilVerticalAlignBottom} /> &nbsp; Import
-                        image
-                      </CButton>
-                    </div>
-                    {/* <div className="col-8">
-                      {getValues(`imageType${index}`)}
-                    </div> */}
-                  </div>
-                  <CModal
-                    size="lg"
-                    alignment="center"
-                    visible={visible}
-                    onClose={() => setVisible(false)}
-                  >
-                    <CModalHeader onClose={() => setVisible(false)}>
-                      <CModalTitle className="text-center w-100">
-                        Image 1
-                      </CModalTitle>
-                    </CModalHeader>
-                    <CModalBody className="w-100">
-                      <img
-                        src={getValues(`imageUrl${index}`)}
-                        alt=""
-                        className="w-100 "
-                      />
-                    </CModalBody>
-                  </CModal>
-                </CCardBody>
-              </CCard>
-            );
-          })}
-      </div>
-    </>
-  );
-}
-function Specification({ typeProduct }) {
-  return (
-    <>
-      {(() => {
-        switch (typeProduct) {
-          case 0:
-            return <div></div>;
-          case 1:
-            return (
-              <div>
-                <div className="row pt-2">
-                  <div className="input-group width85 pt-2 ">
-                    <span className="input-group-text width30">Screen </span>
-                    <CFormTextarea
-                      placeholder=""
-                      style={{ height: "100px", minHeight: "70px" }}
-                    ></CFormTextarea>
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">
-                      Rear camera
-                    </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">
-                      Selfie Camera
-                    </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">RAM </span>
-                    <input type="number" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">Memory </span>
-                    <input type="number" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">CPU </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">GPU </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">
-                      Battery capacity
-                    </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">Sim </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">
-                      Operating system
-                    </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">Origin </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">Debut year</span>
-                    <input type="date" className="form-control" />
-                  </div>
-                </div>
-              </div>
-            );
-
-          case 2:
-            return (
-              <div>
-                <div className="row pt-2">
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">CPU</span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">Screen</span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">Graphics </span>
-                    <input type="number" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">Hard drive</span>
-                    <input type="number" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">
-                      Operating system
-                    </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">
-                      Weight ( kg)
-                    </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">Size (mm)</span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">Origin </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">Debut year</span>
-                    <input type="text" className="form-control" />
-                  </div>
-                </div>
-              </div>
-            );
-          case 3:
-            return (
-              <div>
-                <div className="row pt-2">
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">
-                      Screen technology
-                    </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">
-                      Screen size
-                    </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">CPU </span>
-                    <input type="number" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">
-                      Internal memory
-                    </span>
-                    <input type="number" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">
-                      Operating system
-                    </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">
-                      Can connect to the operating system
-                    </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">
-                      Face material
-                    </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">
-                      String material
-                    </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">Waterproof</span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">
-                      Battery life
-                    </span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">Connection</span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">Origin</span>
-                    <input type="text" className="form-control" />
-                  </div>
-                  <div className="input-group width85 pt-2 h60p">
-                    <span className="input-group-text width30">Debut year</span>
-                    <input type="text" className="form-control" />
-                  </div>
-                </div>
-              </div>
-            );
-          case 4:
-            return <div>Time</div>;
-          default:
-            return <div>You are a other.</div>;
-        }
-      })()}
-    </>
-  );
-}
-function SlideQCMobie({ control, getValues, setValue, register, reset }) {
-  const ListImageSecond = [0, 1, 2];
-  const [image, setImage] = useState();
-  const [image2, setImage2] = useState();
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    if (image) {
-      console.log("true", image);
-      setImage();
-    }
-  }, [image]);
-  function handleMainPhotoInput(idx) {
-    document.getElementById(`formSlide${idx}`).click();
-  }
-  const [modaIndex, setModaIndex] = useState();
-  function addPhoto(e, id) {
-    setImage(e.target.files[0].name);
-    setValue(`imageSlideType${id}`, e.target.files[0].name);
-    setValue(`imageSlideUrl${id}`, URL.createObjectURL(e.target.files[0]));
-  }
-  const [images, setImages] = React.useState([]);
-  const maxNumber = 69;
-  const onChange = (imageList, addUpdateIndex) => {
-    // data for submit
-    console.log(imageList, "true");
-    setImages(imageList);
-  };
-  const handleShow = (e, url) => {
-    console.log(e, url);
-    setModaIndex(url);
-    setVisible(!visible);
-  };
-  return (
-    <div className="row ">
-      <ImageUploading
-        multiple
-        value={images}
-        onChange={onChange}
-        maxNumber={maxNumber}
-        dataURLKey="data_url"
-      >
-        {({
-          imageList,
-          onImageUpload,
-          onImageRemoveAll,
-          onImageUpdate,
-          onImageRemove,
-          isDragging,
-          dragProps,
-        }) => (
-          // write your building UI
-          <div className="upload__image-wrapper">
-            <CButton
-              className="btn btn-dark mx-0 "
-              onClick={onImageUpload}
-              {...dragProps}
-            >
-              <CIcon icon={cilVerticalAlignBottom} /> &nbsp; Import image
-            </CButton>
-            &nbsp;
-            <CButton
-              className="btn btn-dark   mx-0 "
-              onClick={onImageRemoveAll}
-            >
-              <CIcon icon={cilXCircle} /> &nbsp; Remove all images
-            </CButton>
-            <CRow className="align-items-start">
-              {imageList.map((image, index) => {
-                return (
-                  <CCol xs={3} className="minWidth300">
-                    <CCard>
-                      <CCardBody>
-                        <div className=" mt-2 mx-0 " key={index}>
-                          <img
-                            src={image.data_url}
-                            alt=""
-                            className="width260p"
-                            onClick={() => handleShow(index, image.data_url)}
-                          />
-
-                          <div className="image-item__btn-wrapper mt-2">
-                            <CButton
-                              className="btn btn-dark mx-0 col-5"
-                              onClick={() => onImageUpdate(index)}
-                            >
-                              Update
-                            </CButton>
-
-                            <CButton
-                              className="btn btn-dark mx-0 col-5  ml-4"
-                              onClick={() => onImageRemove(index)}
-                            >
-                              Remove
-                            </CButton>
-                          </div>
-                        </div>
-                      </CCardBody>
-                    </CCard>
-                  </CCol>
-                );
-              })}
-            </CRow>
-            <CModal
-              visible={visible}
-              size="lg"
-              alignment="center"
-              onClose={() => setVisible(false)}
-            >
-              <CModalHeader onClose={() => setVisible(false)}>
-                <CModalTitle className="text-center w-100">
-                  List slide
-                </CModalTitle>
-              </CModalHeader>
-              <CModalBody className="w-100">
-                <img src={modaIndex} alt="" className="w-100 " />
-              </CModalBody>
-            </CModal>
-          </div>
-        )}
-      </ImageUploading>
-    </div>
-  );
-}
 
 export default TypeProduct;
