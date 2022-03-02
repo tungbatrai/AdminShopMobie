@@ -1,49 +1,60 @@
-import React from "react";
+/** @format */
 
-const Dashboard = React.lazy(() => import("./views/dashboard/Dashboard"));
-const User = React.lazy(() => import("./views/user/user"));
-const UserNew = React.lazy(() => import("./views/user/UserRegister"));
-const UserDetai = React.lazy(() => import("./views/user/UserDetail"));
-const Product = React.lazy(() => import("./views/product/Product"));
-const ProdcutDetail = React.lazy(() => import("./views/product/ProductDetail"));
-const ProdcutNew = React.lazy(() => import("./views/product/ProductNew"));
-const StyleProduct = React.lazy(() => import("./views/TypeProduct/TypeProduct"));
-const StyleProductDetail = React.lazy(() => import("./views/TypeProduct/TypeProductDetail"));
-const Category = React.lazy(() => import("./views/category/Category"));
-const Brand = React.lazy(() => import("./views/brand/Brand"));
-// Base
+import Login from "./component/Login/Login";
+import ForgotPassword from "./component/Login/ForgotPassword";
+import ResetPassword from "./component/Login/ResetPassword";
+import AdminList from "./component/AdminManager/AdminList";
+import AdminRegister from "./component/AdminManager/AdminRegister";
+import AdmisstionList from "./component/AdmisstionTicket/AdmisstionList";
 
-const routes = [
-  { path: "/dashboard", name: "Dashboard", component: Dashboard },
-  { path: "/user", exact: true, name: "user", component: User },
-  { path: "/user/new", exact: true, name: "New", component: UserNew },
-  { path: "/user/edit/:id", name: "edit", component: UserDetai },
-  { path: "/product", exact: true, name: "Product", component: Product },
+export const routes = [
+  { path: "/login", exact: false, component: Login },
+  { path: "/password/forgot", exact: true, component: ForgotPassword },
+  { path: "/password/reset", exact: true, component: ResetPassword },
 
-  { path: "/product/new", name: "New", component: ProdcutNew },
+  { path: "/index.html", exact: false, component: AdminList },
+  { path: "/", exact: true, component: AdminList },
 
-  {
-    path: "/product/edit/:id",
-    exact: true,
-    name: "Edit",
-    component: ProdcutDetail,
-  },
-  {
-    path: "/product/type-product/:id",
-    exact: true,
-    name: "type Product",
-    component: StyleProduct,
-  },
-  {
-    path: "/product/type-product/detail/:id",
-    exact: true,
-    name: "type Product",
-    component: StyleProductDetail,
-  },
-  { path: "/category", name: "category", component: Category },
-  { path: "/brand", name: "brand", component: Brand },
-  { path: "/", exact: true, name: "Dashboard", component: Dashboard },
-  { path: "*", exact: true, name: "Dashboard", component: Dashboard },
-  
+  { path: "/adminManager", exact: true, component: AdminList },
+  { path: "/admin/register", exact: true, component: AdminRegister },
+  { path: "/admin/edit/:id", exact: true, component: AdminRegister },
+
+  { path: "/admissionTicket", exact: true, component: AdmisstionList },
 ];
+
+export const navigation = [
+  {
+    mainMenu: "User - Admin ",
+    url: "/adminManager",
+  },
+  {
+    mainMenu: "Ship",
+    url: "/admissionTicket",
+  },
+  {
+    mainMenu: "List- Item",
+    subMenu: [
+      { name: "Category", url: "/companies" },
+      { name: "Product", url: "/branches" },
+    ],
+  },
+  {
+    mainMenu: "Comment",
+    url: "/product",
+  },
+  {
+    mainMenu: "Sale",
+    url: "/product",
+  },
+  {
+    mainMenu: "Rating",
+    url: "/product",
+  },
+
+  {
+    mainMenu: "banner",
+    url: "/product",
+  },
+];
+
 export default routes;
