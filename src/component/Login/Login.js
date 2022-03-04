@@ -53,7 +53,7 @@ function Login() {
     }, [authen])
 
     useEffect(() => {
-        dispatch(userActions.logout());
+        // dispatch(userActions.logout());
     }, [dispatch])
 
     function handleChange(e) {

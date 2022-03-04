@@ -16,7 +16,7 @@ export default function PaginationSection(
             itemClass="page-item"
             linkClass="page-link"
             activeClass="active"
-            activePage={number + 1}
+            activePage={number}
             itemsCountPerPage={size}
             totalItemsCount={totalElements}
             pageRangeDisplayed={5}

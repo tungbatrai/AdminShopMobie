@@ -6,47 +6,23 @@ import { NavLink, useHistory } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import swal from "sweetalert";
 import { SwalCommon } from "../../constants/SwalCommon";
-import { AdminService } from "../../services/AdminService";
+import { OrdersService } from "../../services/AdminOrder";
 
-const initialSelect = new Array(10).fill(false);
-
-export default function AdminList() {
+export default function AdminOrders() {
   const history = useHistory();
   const [data, setData] = useState([]);
   const [dataFill, setDataFill] = useState({
     pageable: {
       pageNumber: 1,
-      pageSize: 10,
+      pageSize: 2,
     },
-    role: "",
-    phone: "",
-    email: "",
-    name: "",
+    product: "",
+    brand: "",
+    user: "",
+    category: "",
+    status: "",
   });
 
-  const [selected, setSelected] = useState(initialSelect);
-  const [selectAllCheckBox, setSelectAllCheckBox] = useState(false);
-
-  function handleSelected(index) {
-    setSelected(
-      selected.map((item, idx) => {
-        if (item) {
-          setSelectAllCheckBox(false);
-        }
-        return idx === index ? !item : item;
-      })
-    );
-  }
-
-  function handleSelectAll(e) {
-    const checked = e.target.checked;
-    setSelectAllCheckBox(checked);
-    if (checked) {
-      setSelected(data.data.map(() => true));
-    } else {
-      setSelected(data.data.map(() => false));
-    }
-  }
   function handleChange(e) {
     const { id, value } = e.target;
     setDataFill((data) => ({ ...data, [id]: value }));
@@ -74,47 +50,34 @@ export default function AdminList() {
   }, [isChangePage]);
 
   function getData() {
-    AdminService.getAdmin(dataFill).then((response) => {
+    OrdersService.getOrders(dataFill).then((response) => {
       if (response.status === 200) {
         console.log(response);
-        setSelected(Array(response.data.data.length).fill(false));
-        setSelectAllCheckBox(false);
         setData(response.data);
       }
     });
   }
-  function deleteListAdmin() {
-    let deletedIds = [];
-    selected.forEach((select, index) => {
-      if (select === true) deletedIds.push(data.data[index].id);
-    });
-    let requestBody = {
-      data: deletedIds,
-    };
-    if (deletedIds.length <= 0) {
-      swal(SwalCommon.PLEASE_CHOOSE);
-    } else {
-      swal(SwalCommon.ALERT_DELETE_ALL).then((willDelete) => {
-        if (willDelete) {
-          console.log(requestBody);
-          swal(SwalCommon.COMING_SOON);
+  function deleteListAdmin(id) {
+    swal(SwalCommon.ALERT_DELETE_ALL).then((willDelete) => {
+      if (willDelete) {
+        console.log(id);
+        // swal(SwalCommon.COMING_SOON);
 
-          // AdminService.adminDeleteList(requestBody)
-          //   .then((response) => {
-          //     if (response.status === 200) {
-          //       swal(SwalCommon.ALERT_DELETE_COMPLETE).then(() => {
-          //         getData();
-          //       });
-          //     } else {
-          //       alert("삭제 실패 !");
-          //     }
-          //   })
-          //   .catch((err) => {
-          //     console.log(err);
-          //   });
-        }
-      });
-    }
+        OrdersService.OrdersDeleteList(id)
+          .then((response) => {
+            if (response.status === 200) {
+              swal(SwalCommon.ALERT_DELETE_COMPLETE).then(() => {
+                getData();
+              });
+            } else {
+              alert("삭제 실패 !");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
   }
   function handleCreate() {
     history.push("/admin/register");
@@ -133,7 +96,7 @@ export default function AdminList() {
       <div className="container-fluid">
         <div className="d-block d-xl-flex">
           <div className="tcol-25 tcol-lg-100 d-flex flex-column justify-content-between">
-            <h4 className="font-weight-bold mt-5">Admin list</h4>
+            <h4 className="font-weight-bold mt-5">Order list</h4>
             <div className="font-size12">
               Total &nbsp;<span>{data.totalElements}</span>&nbsp;case
             </div>
@@ -146,21 +109,43 @@ export default function AdminList() {
                   <div className="col-3">
                     <div className="row">
                       <div className="col-3 px-1 font-size11 align-self-center text-center">
-                        Role
+                        Status
                       </div>
                       <div className="col-9 px-1 d-flex">
                         <div class="d-flex bd-highlight mb-3 w-100">
                           <div class="pt-3 bd-highlight w-100">
                             {" "}
                             <select
-                              id="role"
+                              id="status"
                               className="form-control border-black w-100"
                               onChange={handleChange}
                             >
                               <option value="">Select</option>
-                              <option value="ADMIN">Admin</option>
-                              <option value="USER">User</option>
+                              <option value="COMPLETED">Completed</option>
+                              <option value="INCOM">Incom</option>
+                              <option value="WAITTING">waitting</option>
                             </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-3">
+                    <div className="row">
+                      <div className="col-3 px-1 font-size11 align-self-center text-center">
+                        User
+                      </div>
+                      <div className="col-9 px-1 d-flex">
+                        <div class="d-flex bd-highlight mb-3 w-100">
+                          <div class="pt-3 bd-highlight w-100">
+                            {" "}
+                            <input
+                              type="text"
+                              className="form-control border-black "
+                              id="user"
+                              required
+                              onChange={handleChange}
+                            ></input>
                           </div>
                         </div>
                       </div>
@@ -172,7 +157,7 @@ export default function AdminList() {
                   <div className="col-3">
                     <div className="row">
                       <div className="col-3 px-1 font-size11 align-self-center text-center">
-                        Name
+                        Product name
                       </div>
                       <div className="col-9 px-1 d-flex">
                         <div class="d-flex bd-highlight mb-3">
@@ -181,7 +166,7 @@ export default function AdminList() {
                             <input
                               type="text"
                               className="form-control border-black "
-                              id="name"
+                              id="product"
                               required
                               onChange={handleChange}
                             ></input>
@@ -193,7 +178,7 @@ export default function AdminList() {
                   <div className="col-3">
                     <div className="row">
                       <div className="col-3 px-1 font-size11 align-self-center text-center">
-                        Email
+                        Brand
                       </div>
                       <div className="col-9 px-1 d-flex">
                         <div class="d-flex bd-highlight mb-3">
@@ -202,7 +187,7 @@ export default function AdminList() {
                             <input
                               type="text"
                               className="form-control border-black "
-                              id="email"
+                              id="brand"
                               required
                               onChange={handleChange}
                             ></input>
@@ -214,7 +199,7 @@ export default function AdminList() {
                   <div className="col-3">
                     <div className="row">
                       <div className="col-3 px-1 font-size11 align-self-center text-center">
-                        Phone
+                        Category
                       </div>
                       <div className="col-9 px-1 d-flex">
                         <div class="d-flex bd-highlight mb-3">
@@ -223,7 +208,7 @@ export default function AdminList() {
                             <input
                               type="text"
                               className="form-control border-black "
-                              id="phone"
+                              id="category"
                               required
                               onChange={handleChange}
                             ></input>
@@ -252,19 +237,21 @@ export default function AdminList() {
               <Table bordered>
                 <thead>
                   <tr>
-                    <th className="text-center">
+                    {/* <th className="text-center">
                       <Form.Check
                         checked={selectAllCheckBox}
                         onChange={handleSelectAll}
                       />
-                    </th>
+                    </th> */}
 
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Role</th>
+                    <th>Product Name</th>
+                    <th>User Name</th>
+                    <th>Brand Name</th>
+                    <th>Category Name</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
                     <th>Detail</th>
-                    <th>Reset Password</th>
+                    <th>Delete</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -273,18 +260,12 @@ export default function AdminList() {
                     data.data.map((item, index) => {
                       return (
                         <tr key={index}>
-                          <td className="text-center">
-                            <Form.Check
-                              onChange={() => handleSelected(index)}
-                              checked={selected[index]}
-                            />
-                          </td>
-                          <td>{item.name}</td>
-                          <td>{item.email}</td>
-                          <td>{item.phone}</td>
-                          <td>
-                            {item.role === "ADMIN" ? <>Admin</> : <>User</>}
-                          </td>
+                          <td>{item.product_name}</td>
+                          <td>{item.user_name}</td>
+                          <td>{item.brand_name}</td>
+                          <td>{item.category_name}</td>
+                          <td>{item.quantity}</td>
+                          <td>{item.status}</td>
                           <td>
                             <Button
                               className="btn-ct-light"
@@ -294,14 +275,18 @@ export default function AdminList() {
                               Detail
                             </Button>
                           </td>
-                          <td>
+                          <td className="text-center">
                             <Button
                               className="btn-ct-light"
                               variant="light"
-                              //    onClick={() => ChangePass(item.id)}
+                              onClick={() => deleteListAdmin(item.id)}
                             >
-                              Reset Password
+                              Delete
                             </Button>
+                            {/* <Form.Check
+                              onChange={() => handleSelected(index)}
+                              checked={selected[index]}
+                            /> */}
                           </td>
                         </tr>
                       );
@@ -311,15 +296,7 @@ export default function AdminList() {
             </div>
 
             <div className="d-flex justify-content-between">
-              <div className="float-left">
-                <Button
-                  className="btn-ct-light"
-                  variant="light"
-                  onClick={() => deleteListAdmin()}
-                >
-                  Delete
-                </Button>
-              </div>
+              <div className="float-left"></div>
               <PaginationSection
                 size={dataFill.pageable.pageSize}
                 number={data.currentPage}

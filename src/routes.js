@@ -5,7 +5,7 @@ import ForgotPassword from "./component/Login/ForgotPassword";
 import ResetPassword from "./component/Login/ResetPassword";
 import AdminList from "./component/AdminManager/AdminList";
 import AdminRegister from "./component/AdminManager/AdminRegister";
-import AdmisstionList from "./component/AdmisstionTicket/AdmisstionList";
+import AdminOrders from "./component/AdminOrders/AdminOrders";
 
 export const routes = [
   { path: "/login", exact: false, component: Login },
@@ -19,7 +19,10 @@ export const routes = [
   { path: "/admin/register", exact: true, component: AdminRegister },
   { path: "/admin/edit/:id", exact: true, component: AdminRegister },
 
-  { path: "/admissionTicket", exact: true, component: AdmisstionList },
+  { path: "/orders-shipping", exact: true, component: AdminOrders },
+  { path: "/orders-completed", exact: true, component: AdminOrders },
+  { path: "/orders/register", exact: true, component: AdminRegister },
+  { path: "/orders/edit/:id", exact: true, component: AdminRegister },
 ];
 
 export const navigation = [
@@ -27,9 +30,13 @@ export const navigation = [
     mainMenu: "User - Admin ",
     url: "/adminManager",
   },
+
   {
-    mainMenu: "Ship",
-    url: "/admissionTicket",
+    mainMenu: "Orders",
+    subMenu: [
+      { name: "Orders shipping", url: "/orders-shipping" },
+      { name: "Orders completed", url: "/orders-completed" },
+    ],
   },
   {
     mainMenu: "List- Item",
