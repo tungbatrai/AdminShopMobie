@@ -2,35 +2,29 @@
 
 import { Button, Form, Table } from "react-bootstrap";
 import PaginationSection from "../common/PaginationSection";
-import {
-  useParams,
-  lNavLink,
-  useHistory,
-  useRouteMatch,
-} from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import swal from "sweetalert";
 import { SwalCommon } from "../../constants/SwalCommon";
-import { OrdersService } from "../../services/AdminOrder";
-export default function AdminOrders() {
-  let { url } = useRouteMatch();
+import { AdminService } from "../../services/AdminService";
+import { RattingService } from "../../services/RattingService";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+const initialSelect = new Array(10).fill(false);
+
+export default function RatingManager() {
   const history = useHistory();
   const [data, setData] = useState([]);
-  const [active, setActive] = useState(true);
   const [dataFill, setDataFill] = useState({
     pageable: {
       pageNumber: 1,
       pageSize: 10,
     },
-    product: "",
-    brand: "",
-    user: "",
-    category: "",
+    star: "",
     startFillDate: "",
     endFillDate: "",
   });
+
   const [endDate, setendDate] = useState("");
   const [startDate, setstartDate] = useState("");
   function handleChangeStartDate(date) {
@@ -136,91 +130,16 @@ export default function AdminOrders() {
     );
   }
   useEffect(() => {
-    if (url === "/orders-shipping") {
-      const status = "SHIPPING";
-      getData(status);
-    } else {
-      const status = "COMPLETED";
-      getData(status);
-      setActive(false);
-    }
+    getData();
   }, [isChangePage]);
 
-  function getData(status) {
-    console.log(status);
-    OrdersService.getOrders(dataFill, status).then((response) => {
+  function getData() {
+    RattingService.getList(dataFill).then((response) => {
       if (response.status === 200) {
-        console.log(url);
+        console.log(response.data);
         setData(response.data);
       }
     });
-  }
-  function ShippingOrer(id) {
-    swal(SwalCommon.ALERT_QUENSTION_COMPLETED_SHIP).then((event) => {
-      if (event) {
-        console.log(id);
-        // swal(SwalCommon.COMING_SOON);
-        const d1 = new Date().getTime();
-        const a = ["ft", id, d1];
-        let shipCode = {
-          ship_code: a.join(""),
-        };
-
-        console.log(shipCode);
-        OrdersService.OrderShip(id, shipCode)
-          .then((response) => {
-            if (response.status === 200) {
-              swal(SwalCommon.ALERT_COMPLETED_SHIP).then(() => {
-                window.location.reload();
-              });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    });
-  }
-  function CompletedOrer(id) {
-    swal(SwalCommon.ALERT_DELETE_ALL).then((event) => {
-      if (event) {
-        console.log(id);
-        swal(SwalCommon.COMING_SOON);
-      }
-    });
-  }
-  function deleteOrder(id) {
-    swal(SwalCommon.ALERT_DELETE_ALL).then((willDelete) => {
-      if (willDelete) {
-        console.log(id);
-        // swal(SwalCommon.COMING_SOON);
-
-        OrdersService.OrdersDeleteList(id)
-          .then((response) => {
-            if (response.status === 200) {
-              swal(SwalCommon.ALERT_DELETE_COMPLETE).then(() => {
-                getData();
-              });
-            } else {
-              alert("Delete fail !");
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    });
-  }
-  function handleCreate() {
-    history.push("/admin/register");
-  }
-
-  function handleEdit(id) {
-    history.push("/admin/edit/" + id);
-  }
-
-  function ChangePass(id) {
-    history.push("/changePassword/" + id);
   }
 
   return (
@@ -228,22 +147,16 @@ export default function AdminOrders() {
       <div className="container-fluid">
         <div className="d-block d-xl-flex">
           <div className="tcol-25 tcol-lg-100 d-flex flex-column justify-content-between">
-            <h4 className="font-weight-bold mt-5">
-              {" "}
-              {active ? <>Ship orders</> : <>Orders completed</>}
-            </h4>
+            <h4 className="font-weight-bold mt-5">Rating list</h4>
             <div className="font-size12">
               Total &nbsp;<span>{data.totalElements}</span>&nbsp;case
             </div>
           </div>
-
           <div className="tcol-75 tcol-lg-100">
             <div className="search">
               <div className="tcol-90 d-flex justify-content-center flex-column">
                 <div className="row mx-0">
-                  <div className="col-2 px-1 font-size11 align-self-center text-center">
-                    
-                  </div>
+                  <div className="col-2 text-center">Time</div>
                   <div className="col-10 px-1 d-flex">
                     <div className="tcol-20">
                       <DatePicker
@@ -306,40 +219,14 @@ export default function AdminOrders() {
                 </div>
                 <div className="row mx-0">
                   <div className="col-2"></div>
-
                   <div className="col-3">
                     <div className="row">
                       <div className="col-3 px-1 font-size11 align-self-center text-center">
-                        User
-                      </div>
-                      <div className="col-9 px-1 d-flex">
-                        <div class="d-flex bd-highlight mb-3 w-100">
-                          <div class="pt-3 bd-highlight w-100">
-                            {" "}
-                            <input
-                              type="text"
-                              className="form-control border-black "
-                              id="user"
-                              required
-                              onChange={handleChange}
-                            ></input>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="row mx-0">
-                  <div className="col-2"></div>
-                  <div className="col-3">
-                    <div className="row">
-                      <div className="col-3 px-1 font-size11 align-self-center text-center">
-                        Product name
+                        Product
                       </div>
                       <div className="col-9 px-1 d-flex">
                         <div class="d-flex bd-highlight mb-3">
                           <div class="pt-3 bd-highlight">
-                            {" "}
                             <input
                               type="text"
                               className="form-control border-black "
@@ -355,7 +242,7 @@ export default function AdminOrders() {
                   <div className="col-3">
                     <div className="row">
                       <div className="col-3 px-1 font-size11 align-self-center text-center">
-                        Brand
+                        Star
                       </div>
                       <div className="col-9 px-1 d-flex">
                         <div class="d-flex bd-highlight mb-3">
@@ -364,28 +251,7 @@ export default function AdminOrders() {
                             <input
                               type="text"
                               className="form-control border-black "
-                              id="brand"
-                              required
-                              onChange={handleChange}
-                            ></input>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-3">
-                    <div className="row">
-                      <div className="col-3 px-1 font-size11 align-self-center text-center">
-                        Category
-                      </div>
-                      <div className="col-9 px-1 d-flex">
-                        <div class="d-flex bd-highlight mb-3">
-                          <div class="pt-3 bd-highlight">
-                            {" "}
-                            <input
-                              type="text"
-                              className="form-control border-black "
-                              id="category"
+                              id="star"
                               required
                               onChange={handleChange}
                             ></input>
@@ -414,19 +280,12 @@ export default function AdminOrders() {
               <Table bordered>
                 <thead>
                   <tr>
-                    <th> </th>
-                    <th>Product Name</th>
-                    <th>User Name</th>
-                    <th>Brand Name</th>
-                    <th>Category Name</th>
-                    <th>Ship code</th>
-                    <th>Quantity</th>
-                    <th>Status</th>
+                    <th className="text-center"></th>
 
-                    <th>Time order</th>
-                    <th>Detail</th>
-                    <th>Delete</th>
-                    {active && <th>Shipping status</th>}
+                    <th>User name</th>
+                    <th>Product name</th>
+                    <th>Rate</th>
+                    <th>time_rate</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -435,75 +294,16 @@ export default function AdminOrders() {
                     data.data.map((item, index) => {
                       return (
                         <tr key={index}>
-                          <td>{data?.totalElements - index} </td>
-                          <td>{item.product_name}</td>
-                          <td>{item.user_name}</td>
-                          <td>{item.brand_name}</td>
-                          <td>{item.category_name}</td>
-                          <td>{item.ship_code}</td>
-                          <td>{item.quantity}</td>
-                          <td>
-                            {item.ship_code ? (
-                              <>{item.status}</>
-                            ) : (
-                              <>
-                                {item.status === "COMPLETED" ? (
-                                  <>COMPLETED</>
-                                ) : (
-                                  <>ORDERS</>
-                                )}
-                              </>
-                            )}
-                          </td>{" "}
-                          <td>{item.time_order}</td>
-                          <td>
-                            <Button
-                              className="btn-ct-light"
-                              variant="light"
-                              //  onClick={() => handleEdit(item.id)}
-                            >
-                              Detail
-                            </Button>
-                          </td>
                           <td className="text-center">
-                            <Button
-                              className="btn-ct-light"
-                              variant="light"
-                              onClick={() => deleteOrder(item.id)}
-                            >
-                              Delete
-                            </Button>
+                            {data.totalElements -
+                              (index +
+                                dataFill.pageable.pageSize *
+                                  (data.currentPage - 1))}
                           </td>
-                          {active ? (
-                            <>
-                              <td className="text-center">
-                                {item.ship_code ? (
-                                  <>
-                                    {" "}
-                                    <Button
-                                      className="btn-ct-light"
-                                      variant="light"
-                                      onClick={() => CompletedOrer(item.id)}
-                                    >
-                                      Click to Completed
-                                    </Button>
-                                  </>
-                                ) : (
-                                  <>
-                                    <Button
-                                      className="btn-ct-light"
-                                      variant="light"
-                                      onClick={() => ShippingOrer(item.id)}
-                                    >
-                                      Click to Shipping
-                                    </Button>
-                                  </>
-                                )}
-                              </td>
-                            </>
-                          ) : (
-                            <></>
-                          )}
+                          <td>{item.user_name}</td>
+                          <td>{item.product_name}</td>
+                          <td>{item.rate}</td>
+                          <td>{item.time_rate}</td>
                         </tr>
                       );
                     })}

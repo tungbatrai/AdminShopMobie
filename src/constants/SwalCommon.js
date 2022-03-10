@@ -14,17 +14,18 @@ export const SwalCommon = {
     dangerMode: true,
   },
   ALERT_SAVE_COMPLETE: {
-    text: "저장이 완료되었습니다.",
+    text: "Save is complete.",
     icon: "success",
     button: "Confirm",
   },
+
   ALERT_DELETE_FAILED: {
     text: "저장에 실패했습니다.",
     icon: "error",
     button: "Confirm",
   },
   COMMON_FAILED: {
-    text: "오류가 발생했습니다.\n다시 시도해주세요.",
+    text: "An error has occurred.\n Please try again.",
     icon: "error",
     button: "Confirm",
   },
@@ -44,12 +45,12 @@ export const SwalCommon = {
     button: "Confirm",
   },
   ALERT_CHECK_IMAGE: {
-    text: "파일은 jpg, png, jpeg, 용량은 최대 5mb까지만 가능합니다.",
+    text: "Files can be jpg, png, jpeg, and the maximum size is 5 MB.",
     icon: "error",
     button: "Confirm",
   },
   ALERT_CANCEL: {
-    text: "해당 내역을 Cancel하시겠습니까? ",
+    text: "Are you sure you want to cancel this statement? ",
     icon: "warning",
     buttons: ["Cancel", "Confirm"],
   },
@@ -88,11 +89,7 @@ export const SwalCommon = {
     icon: "warning",
     button: "Confirm",
   },
-  ALERT_WARNING_CFPASS: {
-    text: "비밀번호가 일치하지 않습니다. 다시 한 번 Confirm해주세요",
-    icon: "warning",
-    button: "Confirm",
-  },
+
   ALERT_CANCEL_EVENT: {
     text: "이벤트를 Cancel하시겠습니까?",
     icon: "warning",
@@ -139,7 +136,7 @@ export const SwalCommon = {
     button: "Confirm",
   },
   DATE_RULES: {
-    text: "시작일시는 종료일시 이전으로만 설정이 가능합니다.",
+    text: "The start date and time can be set only before the end date and time.",
     icon: "error",
     button: "Confirm",
   },
@@ -240,9 +237,14 @@ export const SwalCommon = {
     icon: "success",
     button: "Confirm",
   },
-  ALERT_QUENSTION_COMPLETED_SHIP : {
+  ALERT_QUENSTION_COMPLETED_SHIP: {
     text: "Would you like to complete the order?",
     icon: "warning",
     buttons: ["Cancel", "Confirm"],
-  }
+  },
+  ALERT_WARNING_CFPASS: {
+    text: "Password does not match. Please confirm again",
+    icon: "warning",
+    button: "Confirm",
+  },
 };

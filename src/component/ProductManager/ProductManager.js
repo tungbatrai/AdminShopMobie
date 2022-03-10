@@ -7,20 +7,21 @@ import React, { useEffect, useState } from "react";
 import swal from "sweetalert";
 import { SwalCommon } from "../../constants/SwalCommon";
 import { OrdersService } from "../../services/AdminOrder";
+import { productService } from "../../services/productService";
 
-export default function AdminOrders() {
+export default function ProductManager() {
   const history = useHistory();
   const [data, setData] = useState([]);
   const [dataFill, setDataFill] = useState({
     pageable: {
       pageNumber: 1,
-      pageSize: 2,
+      pageSize: 10,
     },
     product: "",
     brand: "",
-    user: "",
+    category_id: "",
     category: "",
-    status: "",
+    brand_id: "",
   });
 
   function handleChange(e) {
@@ -50,27 +51,28 @@ export default function AdminOrders() {
   }, [isChangePage]);
 
   function getData() {
-    OrdersService.getOrders(dataFill).then((response) => {
+    productService.getProduct(dataFill).then((response) => {
       if (response.status === 200) {
         console.log(response);
         setData(response.data);
       }
     });
   }
-  function deleteListAdmin(id) {
+  function deleteItem(id) {
     swal(SwalCommon.ALERT_DELETE_ALL).then((willDelete) => {
       if (willDelete) {
         console.log(id);
         // swal(SwalCommon.COMING_SOON);
 
-        OrdersService.OrdersDeleteList(id)
+        productService
+          .deleteProduct(id)
           .then((response) => {
             if (response.status === 200) {
               swal(SwalCommon.ALERT_DELETE_COMPLETE).then(() => {
                 getData();
               });
             } else {
-              alert("삭제 실패 !");
+              alert("Delete fail !");
             }
           })
           .catch((err) => {
@@ -96,11 +98,12 @@ export default function AdminOrders() {
       <div className="container-fluid">
         <div className="d-block d-xl-flex">
           <div className="tcol-25 tcol-lg-100 d-flex flex-column justify-content-between">
-            <h4 className="font-weight-bold mt-5">Order list</h4>
+            <h4 className="font-weight-bold mt-5">Product list</h4>
             <div className="font-size12">
               Total &nbsp;<span>{data.totalElements}</span>&nbsp;case
             </div>
           </div>
+
           <div className="tcol-75 tcol-lg-100">
             <div className="search">
               <div className="tcol-90 d-flex justify-content-center flex-column">
@@ -109,60 +112,11 @@ export default function AdminOrders() {
                   <div className="col-3">
                     <div className="row">
                       <div className="col-3 px-1 font-size11 align-self-center text-center">
-                        Status
-                      </div>
-                      <div className="col-9 px-1 d-flex">
-                        <div class="d-flex bd-highlight mb-3 w-100">
-                          <div class="pt-3 bd-highlight w-100">
-                            {" "}
-                            <select
-                              id="status"
-                              className="form-control border-black w-100"
-                              onChange={handleChange}
-                            >
-                              <option value="">Select</option>
-                              <option value="COMPLETED">Completed</option>
-                              <option value="INCOM">Incom</option>
-                              <option value="WAITTING">waitting</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-3">
-                    <div className="row">
-                      <div className="col-3 px-1 font-size11 align-self-center text-center">
-                        User
-                      </div>
-                      <div className="col-9 px-1 d-flex">
-                        <div class="d-flex bd-highlight mb-3 w-100">
-                          <div class="pt-3 bd-highlight w-100">
-                            {" "}
-                            <input
-                              type="text"
-                              className="form-control border-black "
-                              id="user"
-                              required
-                              onChange={handleChange}
-                            ></input>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="row mx-0">
-                  <div className="col-2"></div>
-                  <div className="col-3">
-                    <div className="row">
-                      <div className="col-3 px-1 font-size11 align-self-center text-center">
-                        Product name
+                        Product
                       </div>
                       <div className="col-9 px-1 d-flex">
                         <div class="d-flex bd-highlight mb-3">
                           <div class="pt-3 bd-highlight">
-                            {" "}
                             <input
                               type="text"
                               className="form-control border-black "
@@ -183,7 +137,6 @@ export default function AdminOrders() {
                       <div className="col-9 px-1 d-flex">
                         <div class="d-flex bd-highlight mb-3">
                           <div class="pt-3 bd-highlight">
-                            {" "}
                             <input
                               type="text"
                               className="form-control border-black "
@@ -204,7 +157,6 @@ export default function AdminOrders() {
                       <div className="col-9 px-1 d-flex">
                         <div class="d-flex bd-highlight mb-3">
                           <div class="pt-3 bd-highlight">
-                            {" "}
                             <input
                               type="text"
                               className="form-control border-black "
@@ -237,19 +189,15 @@ export default function AdminOrders() {
               <Table bordered>
                 <thead>
                   <tr>
-                    {/* <th className="text-center">
-                      <Form.Check
-                        checked={selectAllCheckBox}
-                        onChange={handleSelectAll}
-                      />
-                    </th> */}
+                    <th className="text-center"></th>
 
-                    <th>Product Name</th>
-                    <th>User Name</th>
+                    <th>Name</th>
+                    <th>tittle_sale</th>
+                    <th>percent_sale</th>
                     <th>Brand Name</th>
                     <th>Category Name</th>
                     <th>Quantity</th>
-                    <th>Status</th>
+                    <th>image</th>
                     <th>Detail</th>
                     <th>Delete</th>
                   </tr>
@@ -260,12 +208,26 @@ export default function AdminOrders() {
                     data.data.map((item, index) => {
                       return (
                         <tr key={index}>
-                          <td>{item.product_name}</td>
-                          <td>{item.user_name}</td>
+                          <td>
+                            {data.totalElements -
+                              (index +
+                                dataFill.pageable.pageSize *
+                                  (data.currentPage - 1))}
+                          </td>
+                          <td>{item.name}</td>
+                          <td>{item.tittle_sale}</td>
+                          <td>
+                            {item.percent_sale ? (
+                              <>{item.percent_sale}%</>
+                            ) : (
+                              <></>
+                            )}
+                          </td>
                           <td>{item.brand_name}</td>
                           <td>{item.category_name}</td>
-                          <td>{item.quantity}</td>
-                          <td>{item.status}</td>
+                          <td>{item.total_quantity}</td>
+                          <td>{item.image}<img src={image} className="img-css" /></td>
+
                           <td>
                             <Button
                               className="btn-ct-light"
@@ -279,7 +241,7 @@ export default function AdminOrders() {
                             <Button
                               className="btn-ct-light"
                               variant="light"
-                              onClick={() => deleteListAdmin(item.id)}
+                              onClick={() => deleteItem(item.id)}
                             >
                               Delete
                             </Button>

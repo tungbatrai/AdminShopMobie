@@ -18,35 +18,12 @@ export default function AdminList() {
       pageNumber: 1,
       pageSize: 10,
     },
-    role: "",
+    role: "ADMIN",
     phone: "",
     email: "",
     name: "",
   });
 
-  const [selected, setSelected] = useState(initialSelect);
-  const [selectAllCheckBox, setSelectAllCheckBox] = useState(false);
-
-  function handleSelected(index) {
-    setSelected(
-      selected.map((item, idx) => {
-        if (item) {
-          setSelectAllCheckBox(false);
-        }
-        return idx === index ? !item : item;
-      })
-    );
-  }
-
-  function handleSelectAll(e) {
-    const checked = e.target.checked;
-    setSelectAllCheckBox(checked);
-    if (checked) {
-      setSelected(data.data.map(() => true));
-    } else {
-      setSelected(data.data.map(() => false));
-    }
-  }
   function handleChange(e) {
     const { id, value } = e.target;
     setDataFill((data) => ({ ...data, [id]: value }));
@@ -76,45 +53,30 @@ export default function AdminList() {
   function getData() {
     AdminService.getAdmin(dataFill).then((response) => {
       if (response.status === 200) {
-        console.log(response);
-        setSelected(Array(response.data.data.length).fill(false));
-        setSelectAllCheckBox(false);
         setData(response.data);
       }
     });
   }
-  function deleteListAdmin() {
-    let deletedIds = [];
-    selected.forEach((select, index) => {
-      if (select === true) deletedIds.push(data.data[index].id);
+  function deleteListAdmin(id) {
+    swal(SwalCommon.ALERT_DELETE_ALL).then((willDelete) => {
+      if (willDelete) {
+        console.log(id);
+        // swal(SwalCommon.COMING_SOON);
+        AdminService.deleteItem(id)
+          .then((response) => {
+            if (response.status === 200) {
+              swal(SwalCommon.ALERT_DELETE_COMPLETE).then(() => {
+                getData();
+              });
+            } else {
+              alert("Delete fail !");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     });
-    let requestBody = {
-      data: deletedIds,
-    };
-    if (deletedIds.length <= 0) {
-      swal(SwalCommon.PLEASE_CHOOSE);
-    } else {
-      swal(SwalCommon.ALERT_DELETE_ALL).then((willDelete) => {
-        if (willDelete) {
-          console.log(requestBody);
-          swal(SwalCommon.COMING_SOON);
-
-          // AdminService.adminDeleteList(requestBody)
-          //   .then((response) => {
-          //     if (response.status === 200) {
-          //       swal(SwalCommon.ALERT_DELETE_COMPLETE).then(() => {
-          //         getData();
-          //       });
-          //     } else {
-          //       alert("삭제 실패 !");
-          //     }
-          //   })
-          //   .catch((err) => {
-          //     console.log(err);
-          //   });
-        }
-      });
-    }
   }
   function handleCreate() {
     history.push("/admin/register");
@@ -146,38 +108,11 @@ export default function AdminList() {
                   <div className="col-3">
                     <div className="row">
                       <div className="col-3 px-1 font-size11 align-self-center text-center">
-                        Role
-                      </div>
-                      <div className="col-9 px-1 d-flex">
-                        <div class="d-flex bd-highlight mb-3 w-100">
-                          <div class="pt-3 bd-highlight w-100">
-                            {" "}
-                            <select
-                              id="role"
-                              className="form-control border-black w-100"
-                              onChange={handleChange}
-                            >
-                              <option value="">Select</option>
-                              <option value="ADMIN">Admin</option>
-                              <option value="USER">User</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="row mx-0">
-                  <div className="col-2"></div>
-                  <div className="col-3">
-                    <div className="row">
-                      <div className="col-3 px-1 font-size11 align-self-center text-center">
                         Name
                       </div>
                       <div className="col-9 px-1 d-flex">
                         <div class="d-flex bd-highlight mb-3">
                           <div class="pt-3 bd-highlight">
-                            {" "}
                             <input
                               type="text"
                               className="form-control border-black "
@@ -252,12 +187,7 @@ export default function AdminList() {
               <Table bordered>
                 <thead>
                   <tr>
-                    <th className="text-center">
-                      <Form.Check
-                        checked={selectAllCheckBox}
-                        onChange={handleSelectAll}
-                      />
-                    </th>
+                    <th className="text-center"></th>
 
                     <th>Name</th>
                     <th>Email</th>
@@ -265,6 +195,7 @@ export default function AdminList() {
                     <th>Role</th>
                     <th>Detail</th>
                     <th>Reset Password</th>
+                    <th>Delete</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -274,10 +205,10 @@ export default function AdminList() {
                       return (
                         <tr key={index}>
                           <td className="text-center">
-                            <Form.Check
-                              onChange={() => handleSelected(index)}
-                              checked={selected[index]}
-                            />
+                            {data.totalElements -
+                              (index +
+                                dataFill.pageable.pageSize *
+                                  (data.currentPage - 1))}
                           </td>
                           <td>{item.name}</td>
                           <td>{item.email}</td>
@@ -289,7 +220,7 @@ export default function AdminList() {
                             <Button
                               className="btn-ct-light"
                               variant="light"
-                              //  onClick={() => handleEdit(item.id)}
+                              onClick={() => handleEdit(item.id)}
                             >
                               Detail
                             </Button>
@@ -303,6 +234,15 @@ export default function AdminList() {
                               Reset Password
                             </Button>
                           </td>
+                          <td>
+                            <Button
+                              className="btn-ct-light"
+                              variant="light"
+                              onClick={() => deleteListAdmin(item.id)}
+                            >
+                              Delete
+                            </Button>
+                          </td>
                         </tr>
                       );
                     })}
@@ -311,15 +251,7 @@ export default function AdminList() {
             </div>
 
             <div className="d-flex justify-content-between">
-              <div className="float-left">
-                <Button
-                  className="btn-ct-light"
-                  variant="light"
-                  onClick={() => deleteListAdmin()}
-                >
-                  Delete
-                </Button>
-              </div>
+              <div className="float-left"></div>
               <PaginationSection
                 size={dataFill.pageable.pageSize}
                 number={data.currentPage}
@@ -330,7 +262,7 @@ export default function AdminList() {
                 <Button
                   className="btn-ct-light"
                   variant="light"
-                  //  onClick={handleCreate}
+                  onClick={handleCreate}
                 >
                   Register
                 </Button>

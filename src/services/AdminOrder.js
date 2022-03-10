@@ -15,7 +15,7 @@ export const OrdersService = {
 const BASE_REST_API_URL = "/order";
 function getOrders(data, status) {
   return API.get(
-    `${BASE_REST_API_URL}?page=${data.pageable.pageNumber}&pageSize=${data.pageable.pageSize}&product=${data.product}&brand=${data.brand}&user=${data.user}&category=${data.category}&status=${status}`
+    `${BASE_REST_API_URL}?page=${data.pageable.pageNumber}&pageSize=${data.pageable.pageSize}&product=${data.product}&brand=${data.brand}&user=${data.user}&category=${data.category}&status=${status}&startDate=${data.startFillDate}&endDate=${data.endFillDate}`
   );
 }
 function OrdersDetail(id) {
@@ -32,7 +32,7 @@ function OrdersEdit(data) {
 function OrdersDeleteList(id) {
   return API.delete(`${BASE_REST_API_URL}/${id}`);
 }
-function OrderShip(id,shipCode) {
+function OrderShip(id, shipCode) {
   return API.put(`${BASE_REST_API_URL}/${id}`, shipCode);
 }
 function OrderCompleted(id) {

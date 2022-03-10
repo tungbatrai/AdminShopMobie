@@ -1,3 +1,5 @@
+/** @format */
+
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
@@ -6,7 +8,7 @@ import { SwalCommon } from "../../constants/SwalCommon";
 import { ValidationText } from "../../constants/Validation";
 import { AdminService } from "../../services/AdminService";
 import ValidationError from "../common/ValidationError";
-
+import { NavLink, useHistory } from "react-router-dom";
 export default function AdminRegister(props) {
   const {
     register,
@@ -16,7 +18,7 @@ export default function AdminRegister(props) {
     getValues,
     setError,
   } = useForm();
-
+  const history = useHistory();
   const [isCreateAction, setCreateAction] = useState(true);
   const [data, setData] = useState({
     id: props.match.params.id,
@@ -26,7 +28,7 @@ export default function AdminRegister(props) {
     let { id } = props.match.params;
     if (id) {
       setCreateAction(false);
-      getData();
+      // getData();
     }
   }, [props.match.params.id]);
 
@@ -39,18 +41,35 @@ export default function AdminRegister(props) {
   }
 
   function onSubmit(data) {
-    if (isCreateAction) {
-      AdminService.adminRegister(data).then((res) => {
-        if (res.status === 200) {
-          swal(SwalCommon.ALERT_SAVE_COMPLETE);
-        }
-      });
+    if (data.password === data.confirmPassword) {
+      if (isCreateAction) {
+        AdminService.adminRegister(data).then((res) => {
+          if (res.status === 200) {
+            swal(SwalCommon.ALERT_SAVE_COMPLETE).then((value) => {
+               history.push("/admin")
+            });
+          }
+        });
+        const dataRegister = {
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          role: "ADMIN",
+          password: data.password,
+        };
+        console.log("register", dataRegister);
+      } else {
+        console.log("edit", data);
+        AdminService.adminEdit(data).then((res) => {
+          if (res.status === 200) {
+            swal(SwalCommon.ALERT_SAVE_COMPLETE).then((value) => {
+             // history.push("/admin")
+            });
+          }
+        });
+      }
     } else {
-      AdminService.adminEdit(data).then((res) => {
-        if (res.status === 200) {
-          swal(SwalCommon.ALERT_SAVE_COMPLETE);
-        }
-      });
+      swal(SwalCommon.ALERT_WARNING_CFPASS);
     }
   }
 
@@ -64,130 +83,223 @@ export default function AdminRegister(props) {
       <div className="mt-5">
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <table className="table table-bordered">
-            <tbody>
-              <tr>
-                <td className="td203">
-                  ID
-                  <span className="text-danger mr-1"> * </span>
-                </td>
-                <td>
-                  <input
-                    className="form-control txtInput"
-                    placeholder="please input ID"
-                    maxLength={50}
-                    {...register("id", {
-                      value: data.id,
-                      required: true,
-                    })}
-                  />
-                  <div className="text-left">
-                    {errors.id && <ValidationError text={ValidationText.ID} />}
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className="td203">
-                  Name
-                  <span className="text-danger mr-1"> * </span>
-                </td>
-                <td>
-                  <input
-                    className="form-control txtInput"
-                    placeholder="please input your Name"
-                    {...register("name", {
-                      value: data.name,
-                      required: true,
-                      maxLength: 20,
-                    })}
-                  />
-                  <div className="text-left">
-                    {errors.name?.type === "required" && (
-                      <ValidationError text="이름을 입력해주세요." />
-                    )}
-                    {errors.name?.type === "maxLength" && (
-                      <ValidationError text="user name only 20 characters" />
-                    )}
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className="td203">
-                  Mobile Number
-                  <span className="text-danger mr-1"> * </span>
-                </td>
-                <td>
-                  <input
-                    className="form-control txtInput"
-                    placeholder="please input mobile number"
-                    maxLength={50}
-                    {...register("phone", {
-                      value: data.phone,
-                      required: true,
-                    })}
-                  />
-                  <div className="text-left">
-                    {errors.id && (
-                      <ValidationError text={ValidationText.Phone} />
-                    )}
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className="td203">
-                  Password
-                  <span className="text-danger mr-1"> * </span>
-                </td>
-                <td>
-                  <input
-                    className="form-control txtInput"
-                    placeholder="please input your password"
-                    maxLength={50}
-                    {...register("password", {
-                      value: data.Password,
-                      required: true,
-                    })}
-                  />
-                  <div className="text-left">
-                    {errors.id && (
-                      <ValidationError text={ValidationText.Password} />
-                    )}
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className="td203">
-                  Confirm Password
-                  <span className="text-danger mr-1"> * </span>
-                </td>
-                <td>
-                  <input
-                    className="form-control txtInput"
-                    placeholder="please confirm password"
-                    maxLength={50}
-                    {...register("confirmPassword", {
-                      value: data.Password,
-                      required: true,
-                    })}
-                  />
-                  <div className="text-left">
-                    {errors.id && (
-                      <ValidationError text={ValidationText.ConfirmPassword} />
-                    )}
-                  </div>
-                </td>
-              </tr>
-            </tbody>
+            {isCreateAction ? (
+              <>
+                {" "}
+                <tbody>
+                  <tr>
+                    <td className="td203">Name</td>
+                    <td>
+                      <input
+                        className="form-control txtInput"
+                        placeholder="please input ID"
+                        maxLength={20}
+                        {...register("name", {
+                          required: true,
+                        })}
+                      />
+                      <div className="text-left">
+                        {errors.name && (
+                          <ValidationError text={ValidationText.Null} />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="td203">Email</td>
+                    <td>
+                      <input
+                        className="form-control txtInput"
+                        placeholder="please input your Name"
+                        maxLength={20}
+                        {...register("email", {
+                          required: true,
+                        })}
+                      />
+                      <div className="text-left">
+                        {errors.email && (
+                          <ValidationError text={ValidationText.Null} />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="td203">Mobile Number</td>
+                    <td>
+                      <input
+                        type="number"
+                        className="form-control txtInput"
+                        placeholder="please input mobile number"
+                        maxLength={20}
+                        {...register("phone", {
+                          required: true,
+                        })}
+                      />
+                      <div className="text-left">
+                        {errors.phone && (
+                          <ValidationError text={ValidationText.Null} />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="td203">Password</td>
+                    <td>
+                      <input
+                        type="password"
+                        className="form-control txtInput"
+                        placeholder="please input your password"
+                        maxLength={20}
+                        {...register("password", {
+                          required: true,
+                        })}
+                      />
+                      <div className="text-left">
+                        {errors.password && (
+                          <ValidationError text={ValidationText.Null} />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="td203">Confirm Password</td>
+                    <td>
+                      <input
+                        type="password"
+                        className="form-control txtInput"
+                        placeholder="please confirm password"
+                        maxLength={20}
+                        {...register("confirmPassword", {
+                          required: true,
+                        })}
+                      />
+                      <div className="text-left">
+                        {errors.confirmPassword && (
+                          <ValidationError text={ValidationText.Null} />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </>
+            ) : (
+              <>
+                {" "}
+                <tbody>
+                  <tr>
+                    <td className="td203">Name</td>
+                    <td>
+                      <input
+                        className="form-control txtInput"
+                        placeholder="please input ID"
+                        maxLength={20}
+                        {...register("name", {
+                          // value: data.id,
+                          required: true,
+                        })}
+                      />
+                      <div className="text-left">
+                        {errors.name && (
+                          <ValidationError text={ValidationText.Null} />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="td203">Email</td>
+                    <td>
+                      <input
+                        className="form-control txtInput"
+                        placeholder="please input your Name"
+                        maxLength={20}
+                        {...register("email", {
+                          // value: data.name,
+                          required: true,
+                        })}
+                      />
+                      <div className="text-left">
+                        {errors.email && (
+                          <ValidationError text={ValidationText.Null} />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="td203">Mobile Number</td>
+                    <td>
+                      <input
+                        className="form-control txtInput"
+                        placeholder="please input mobile number"
+                        maxLength={20}
+                        {...register("phone", {
+                          // value: data.phone,
+                          required: true,
+                        })}
+                      />
+                      <div className="text-left">
+                        {errors.phone && (
+                          <ValidationError text={ValidationText.Null} />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="td203">Password</td>
+                    <td>
+                      <input
+                        type="password"
+                        className="form-control txtInput"
+                        placeholder="please input your password"
+                        maxLength={20}
+                        {...register("password", {
+                          // value: data.Password,
+                          required: true,
+                        })}
+                      />
+                      <div className="text-left">
+                        {errors.password && (
+                          <ValidationError text={ValidationText.Null} />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="td203">Confirm Password</td>
+                    <td>
+                      <input
+                        type="password"
+                        className="form-control txtInput"
+                        placeholder="please confirm password"
+                        maxLength={20}
+                        {...register("confirmPassword", {
+                          required: true,
+                        })}
+                      />
+                      <div className="text-left">
+                        {errors.confirmPassword && (
+                          <ValidationError text={ValidationText.Null} />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </>
+            )}
           </table>
 
           <Row className="justify-content-center mt-5">
             <Col md="2">
-              <Button block variant="secondary" to="/adminManager">
-                {data.id == null ? "취소" : "목록"}
+              <Button
+                block
+                variant="secondary"
+                onClick={() => history.push("/admin")}
+              >
+                Cancel
               </Button>
             </Col>
             <Col md="2">
               <Button block variant="primary" type="submit">
-                저장
+                Save
               </Button>
             </Col>
           </Row>

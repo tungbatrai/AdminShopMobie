@@ -1,10 +1,11 @@
+/** @format */
+
 export const ValidationText = {
   Title: "제목을 입력해주세요",
   Content: "내용을 입력해주세요",
   UserName: "이용자명 입력해주세요",
   Password: "비밀번호 입력해주세요",
   NewPassword: "새 비밀번호를 입력해주세요",
-  ConfirmPassword: "비밀번호를 확인해주세요",
   Character: "문자를 입력해주세요",
   Images: "사진을 선택해주세요",
   Question: "문의 내용을 입력해주세요",
@@ -42,4 +43,6 @@ export const ValidationText = {
     "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
   Keywords: "키워드 입력해주세요",
   Coordinate: "Coordinate 입력해주세요",
+
+  Null: "Please enter data ",
 };
