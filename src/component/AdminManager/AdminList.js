@@ -194,7 +194,6 @@ export default function AdminList() {
                     <th>Phone</th>
                     <th>Role</th>
                     <th>Detail</th>
-                    <th>Reset Password</th>
                     <th>Delete</th>
                   </tr>
                 </thead>
@@ -225,15 +224,7 @@ export default function AdminList() {
                               Detail
                             </Button>
                           </td>
-                          <td>
-                            <Button
-                              className="btn-ct-light"
-                              variant="light"
-                              //    onClick={() => ChangePass(item.id)}
-                            >
-                              Reset Password
-                            </Button>
-                          </td>
+
                           <td>
                             <Button
                               className="btn-ct-light"

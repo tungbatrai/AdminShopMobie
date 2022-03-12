@@ -24,7 +24,7 @@
     "react-bootstrap-tagsinput": "^0.5.0",
     "react-datepicker": "^3.8.0",
     "react-dom": "^17.0.1",
-    "react-hook-form": "^7.10.1",
+    "react-hook-form": "^7.15.0",
     "react-icons": "^3.11.0",
     "react-js-pagination": "^3.0.3",
     "react-kakao-maps": "0.0.13",

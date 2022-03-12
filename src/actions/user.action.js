@@ -18,10 +18,9 @@ function login(email, password) {
       .then((token) => {
         dispatch(success(token));
         localStorage.setItem("token", JSON.stringify(token));
-        console.log(token);
 
         if (token.status == 200) {
-           dispatch(push("/"))
+          dispatch(push("/"));
         } else {
           swal("Incorrect username and password", "success");
           swal("Login fails!", "Incorrect username and password", "error");
@@ -43,12 +42,13 @@ function login(email, password) {
 }
 
 function logout() {
-  return (dispatch) => {
-    userService.logout().finally(() => {
-      dispatch({ type: userConstants.LOGOUT });
-      localStorage.removeItem("token");
-    });
-  };
+  localStorage.removeItem("token");
+  // return (dispatch) => {
+  //   userService.logout().finally(() => {
+  //     dispatch({ type: userConstants.LOGOUT });
+  //     localStorage.removeItem("token");
+  //   });
+  // };
 }
 
 function reclaimPasswordByEmail(email) {

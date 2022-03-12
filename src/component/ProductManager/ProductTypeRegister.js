@@ -3,22 +3,14 @@
 import { Button, Form, Modal, Table } from "react-bootstrap";
 import React, { useEffect, useRef, useState } from "react";
 import { useHistory, useParams } from "react-router";
-// import { SwalCommon } from "../../constants/SwalCommon";
-// import swal from "sweetalert";
-// import moment from "moment";
-// import { trackPromise } from "react-promise-tracker";
+
 import { useForm } from "react-hook-form";
 import { AwsService } from "../../services/AwsService";
 import swal from "sweetalert";
 import { SwalCommon } from "../../constants/SwalCommon";
-import { CategoryService } from "../../services/CategoryService";
-export default function RegisterModal({ show, handleCloseModal }) {
-  //   const [data, setData] = useState();
-  //   let { id } = useParams();
+import { productService } from "../../services/productService";
+export default function ProductTypeRegister({ id, show, handleCloseModal }) {
   const [image, setImage] = useState();
-  //   const history = useHistory();
-
-  //   useEffect(() => {}, []);
   const {
     register,
     formState: { errors },
@@ -29,12 +21,16 @@ export default function RegisterModal({ show, handleCloseModal }) {
   } = useForm();
 
   function onSubmit(data) {
-    if (getValues(`name`) && image) {
+    if (image) {
       const dataSave = {
-        name: getValues(`name`),
         image: image,
+        price: getValues(`price`),
+        quantity: getValues(`quantity`),
+        color: getValues(`color`),
+        type: getValues(`type`),
+        color_code: getValues(`color_code`),
       };
-      CategoryService.categoryRegister(dataSave).then((res) => {
+      productService.productTypeCreate(dataSave, id).then((res) => {
         if (res.status === 200) {
           swal(SwalCommon.ALERT_SAVE_COMPLETE).then((value) => {
             window.location.reload(true);
@@ -43,6 +39,8 @@ export default function RegisterModal({ show, handleCloseModal }) {
           swal(SwalCommon.COMMON_FAILED);
         }
       });
+    } else {
+      swal(SwalCommon.ALERT_IMAGE_NULL);
     }
   }
   function handleMainPhotoInput() {
@@ -76,17 +74,30 @@ export default function RegisterModal({ show, handleCloseModal }) {
   return (
     <Modal show={show} onHide={handleCloseModal} size="lg" centered>
       <Modal.Header closeButton className="background-model">
-        <Modal.Title>Register Category</Modal.Title>
+        <Modal.Title>Register product type</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="d-flex justify-content-center mt-4">
           <form noValidate onSubmit={handleSubmit(onSubmit)}>
-            <div className="row">
-              <div className="col-3 mt-2">Name</div>
-              <div className="col-9">
+            <div className="row mt-4">
+              <div className="col-4 mt-2">Price</div>
+              <div className="col-8">
                 <input
+                  type="number"
                   className="form-control txtInput w-100"
-                  {...register(`name`, {
+                  {...register(`price`, {
+                    required: true,
+                  })}
+                />
+              </div>
+            </div>
+            <div className="row mt-4">
+              <div className="col-4 mt-2">Quantity</div>
+              <div className="col-8">
+                <input
+                  type="number"
+                  className="form-control txtInput w-100"
+                  {...register(`quantity`, {
                     required: true,
                     maxLength: 10,
                   })}
@@ -94,8 +105,45 @@ export default function RegisterModal({ show, handleCloseModal }) {
               </div>
             </div>
             <div className="row mt-4">
-              <div className="col-3 mt-2">Image</div>
-              <div className="col-9">
+              <div className="col-4 mt-2">Type</div>
+              <div className="col-8">
+                <input
+                  className="form-control txtInput w-100"
+                  {...register(`type`, {
+                    required: true,
+                    maxLength: 10,
+                  })}
+                />
+              </div>
+            </div>
+            <div className="row mt-4">
+              <div className="col-4 mt-2"> Color</div>
+              <div className="col-8">
+                <input
+                  className="form-control txtInput w-100"
+                  {...register(`color`, {
+                    required: true,
+                    maxLength: 10,
+                  })}
+                />
+              </div>
+            </div>
+            <div className="row mt-4">
+              <div className="col-4 mt-2">Color code</div>
+              <div className="col-8">
+                <input
+                  className="form-control txtInput w-100"
+                  {...register(`color_code`, {
+                    required: true,
+                    maxLength: 10,
+                  })}
+                />
+              </div>
+            </div>
+
+            <div className="row mt-4">
+              <div className="col-4 mt-2">Image</div>
+              <div className="col-8">
                 <div className="">
                   <Form.File.Input
                     hidden={true}

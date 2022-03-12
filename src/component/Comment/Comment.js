@@ -6,13 +6,12 @@ import { NavLink, useHistory } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import swal from "sweetalert";
 import { SwalCommon } from "../../constants/SwalCommon";
-import { AdminService } from "../../services/AdminService";
-import { RattingService } from "../../services/RattingService";
+import { CommentService } from "../../services/CommentService";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 const initialSelect = new Array(10).fill(false);
 
-export default function RatingManager() {
+export default function Comment() {
   const history = useHistory();
   const [data, setData] = useState([]);
   const [dataFill, setDataFill] = useState({
@@ -20,7 +19,8 @@ export default function RatingManager() {
       pageNumber: 1,
       pageSize: 10,
     },
-    star: "",
+    product:"",
+    commenter: "",
     startFillDate: "",
     endFillDate: "",
   });
@@ -134,8 +134,9 @@ export default function RatingManager() {
   }, [isChangePage]);
 
   function getData() {
-    RattingService.getList(dataFill).then((response) => {
+    CommentService.getList(dataFill).then((response) => {
       if (response.status === 200) {
+        console.log(response.data);
         setData(response.data);
       }
     });
@@ -146,7 +147,7 @@ export default function RatingManager() {
       <div className="container-fluid">
         <div className="d-block d-xl-flex">
           <div className="tcol-25 tcol-lg-100 d-flex flex-column justify-content-between">
-            <h4 className="font-weight-bold mt-5">Rating list</h4>
+            <h4 className="font-weight-bold mt-5">Comment list</h4>
             <div className="font-size12">
               Total &nbsp;<span>{data.totalElements}</span>&nbsp;case
             </div>
@@ -240,17 +241,17 @@ export default function RatingManager() {
                   </div>
                   <div className="col-3">
                     <div className="row">
-                      <div className="col-3 px-1 font-size11 align-self-center text-center">
-                        Star
+                      <div className="col-4 px-1 font-size11 align-self-center text-center">
+                      comment
                       </div>
-                      <div className="col-9 px-1 d-flex">
+                      <div className="col-8 px-1 d-flex">
                         <div class="d-flex bd-highlight mb-3">
                           <div class="pt-3 bd-highlight">
                             {" "}
                             <input
                               type="text"
                               className="form-control border-black "
-                              id="star"
+                              id="commenter"
                               required
                               onChange={handleChange}
                             ></input>
@@ -283,8 +284,8 @@ export default function RatingManager() {
 
                     <th>User name</th>
                     <th>Product name</th>
-                    <th>Rate</th>
-                    <th>time_rate</th>
+                    <th>Content</th>
+                    <th>Time comment</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -301,8 +302,8 @@ export default function RatingManager() {
                           </td>
                           <td>{item.user_name}</td>
                           <td>{item.product_name}</td>
-                          <td>{item.rate}</td>
-                          <td>{item.time_rate}</td>
+                          <td>{item.content}</td>
+                          <td>{item.time_comment}</td>
                         </tr>
                       );
                     })}

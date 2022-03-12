@@ -7,8 +7,12 @@ import AdminList from "./component/AdminManager/AdminList";
 import AdminRegister from "./component/AdminManager/AdminRegister";
 import AdminOrders from "./component/AdminOrders/AdminOrders";
 import ProductManager from "./component/ProductManager/ProductManager";
-import CategoryManager from "./component/Product/CategoryManager";
+import ProductRegisterDetail from "./component/ProductManager/ProductRegisterDetail";
+import ProductTypeManager from "./component/ProductManager/PrductTypeManage";
+import CategoryManager from "./component/Category/CategoryManager";
 import RatingManager from "./component/Rating/RatingManager";
+import Comment from "./component/Comment/Comment";
+import Banner from "./component/Banner/Banner";
 export const routes = [
   { path: "/login", exact: false, component: Login },
   { path: "/password/forgot", exact: true, component: ForgotPassword },
@@ -29,9 +33,13 @@ export const routes = [
   { path: "/product", exact: true, component: ProductManager },
   { path: "/product/category", exact: true, component: CategoryManager },
   { path: "/product/product", exact: true, component: ProductManager },
-  
-  
+  { path: "/product/banner", exact: true, component: Banner },  
+  { path: "/product/product/edit/:id", exact: true, component: ProductRegisterDetail },
+  { path: "/product/product/register", exact: true, component: ProductRegisterDetail },
+  { path: "/product/product/product-type/:id", exact: true, component: ProductTypeManager },
+
   { path: "/rating", exact: true, component: RatingManager },
+  { path: "/comment", exact: true, component: Comment },
 ];
 
 export const navigation = [
@@ -52,11 +60,12 @@ export const navigation = [
     subMenu: [
       { name: "Category", url: "/product/category" },
       { name: "Product", url: "/product/product" },
+      { name: "Banner", url: "/product/banner" },
     ],
   },
   {
     mainMenu: "Comment",
-    url: "/product",
+    url: "/comment",
   },
   {
     mainMenu: "Sale",
@@ -65,11 +74,6 @@ export const navigation = [
   {
     mainMenu: "Rating",
     url: "/rating",
-  },
-
-  {
-    mainMenu: "banner",
-    url: "/product",
   },
 ];
 

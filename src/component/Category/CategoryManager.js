@@ -2,11 +2,9 @@
 
 import { Button, Form, Table } from "react-bootstrap";
 import PaginationSection from "../common/PaginationSection";
-
 import React, { useEffect, useState } from "react";
 import swal from "sweetalert";
 import { SwalCommon } from "../../constants/SwalCommon";
-
 import { CategoryService } from "../../services/CategoryService";
 import { NavLink, useHistory } from "react-router-dom";
 import { AwsService } from "../../services/AwsService";
@@ -89,8 +87,6 @@ export default function CategoryManager() {
   function getData() {
     CategoryService.getList(dataFill).then((response) => {
       if (response.status === 200) {
-        console.log(response);
-
         setData(response.data);
       }
     });
@@ -99,7 +95,6 @@ export default function CategoryManager() {
   function deleteData(id) {
     swal(SwalCommon.ALERT_DELETE_ALL).then((willDelete) => {
       if (willDelete) {
-        console.log(id);
         // swal(SwalCommon.COMING_SOON);
         CategoryService.deleteItem(id)
           .then((response) => {
@@ -122,7 +117,6 @@ export default function CategoryManager() {
   }
   const [editItem, seteditItem] = useState();
   function handleEdit(id, index, image, name) {
-    console.log(id);
     seteditItem(index);
     setImage(image);
     setValue(`data.${index}.name`, name);

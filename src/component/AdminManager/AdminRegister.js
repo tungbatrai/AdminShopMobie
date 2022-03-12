@@ -28,7 +28,7 @@ export default function AdminRegister(props) {
     let { id } = props.match.params;
     if (id) {
       setCreateAction(false);
-      // getData();
+      getData();
     }
   }, [props.match.params.id]);
 
@@ -46,7 +46,7 @@ export default function AdminRegister(props) {
         AdminService.adminRegister(data).then((res) => {
           if (res.status === 200) {
             swal(SwalCommon.ALERT_SAVE_COMPLETE).then((value) => {
-               history.push("/admin")
+              history.push("/admin");
             });
           }
         });
@@ -57,16 +57,22 @@ export default function AdminRegister(props) {
           role: "ADMIN",
           password: data.password,
         };
-        console.log("register", dataRegister);
       } else {
-        console.log("edit", data);
-        AdminService.adminEdit(data).then((res) => {
-          if (res.status === 200) {
-            swal(SwalCommon.ALERT_SAVE_COMPLETE).then((value) => {
-             // history.push("/admin")
-            });
-          }
-        });
+        const dataEdit = {
+          name: data.detail.name,
+          phone: data.detail.phone,
+          email: data.detail.email,
+          role: "ADMIN",
+          password: data.detail.password,
+        };
+
+        // AdminService.adminEdit(dataEdit).then((res) => {
+        //   if (res.status === 200) {
+        //     swal(SwalCommon.ALERT_SAVE_COMPLETE).then((value) => {
+        //       history.push("/admin")
+        //     });
+        //   }
+        // });
       }
     } else {
       swal(SwalCommon.ALERT_WARNING_CFPASS);
@@ -187,13 +193,14 @@ export default function AdminRegister(props) {
                 {" "}
                 <tbody>
                   <tr>
-                    <td className="td203">Name</td>
+                    <td className="td203">Name edit</td>
                     <td>
                       <input
                         className="form-control txtInput"
                         placeholder="please input ID"
                         maxLength={20}
-                        {...register("name", {
+                        defaultValue={data.name}
+                        {...register("detail.name", {
                           // value: data.id,
                           required: true,
                         })}
@@ -212,7 +219,8 @@ export default function AdminRegister(props) {
                         className="form-control txtInput"
                         placeholder="please input your Name"
                         maxLength={20}
-                        {...register("email", {
+                        defaultValue={data.email}
+                        {...register("detail.email", {
                           // value: data.name,
                           required: true,
                         })}
@@ -228,10 +236,12 @@ export default function AdminRegister(props) {
                     <td className="td203">Mobile Number</td>
                     <td>
                       <input
+                        type="number"
                         className="form-control txtInput"
                         placeholder="please input mobile number"
                         maxLength={20}
-                        {...register("phone", {
+                        defaultValue={data.phone}
+                        {...register("detail.phone", {
                           // value: data.phone,
                           required: true,
                         })}
@@ -251,7 +261,8 @@ export default function AdminRegister(props) {
                         className="form-control txtInput"
                         placeholder="please input your password"
                         maxLength={20}
-                        {...register("password", {
+                        defaultValue={data.password}
+                        {...register("detail.password", {
                           // value: data.Password,
                           required: true,
                         })}
@@ -271,7 +282,8 @@ export default function AdminRegister(props) {
                         className="form-control txtInput"
                         placeholder="please confirm password"
                         maxLength={20}
-                        {...register("confirmPassword", {
+                        defaultValue={data.confirmPassword}
+                        {...register("detail.confirmPassword", {
                           required: true,
                         })}
                       />

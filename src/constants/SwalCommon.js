@@ -49,6 +49,11 @@ export const SwalCommon = {
     icon: "error",
     button: "Confirm",
   },
+  ALERT_IMAGE_NULL: {
+    text: "Please import image",
+    icon: "error",
+    button: "Confirm",
+  },
   ALERT_CANCEL: {
     text: "Are you sure you want to cancel this statement? ",
     icon: "warning",
@@ -131,7 +136,7 @@ export const SwalCommon = {
     button: ["Cancel", "Confirm"],
   },
   ALERT_WARNING_SELECT: {
-    text: "선택된 회원이 없습니다.",
+    text: "There are no members selected.",
     icon: "error",
     button: "Confirm",
   },

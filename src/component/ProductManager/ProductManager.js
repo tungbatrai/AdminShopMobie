@@ -8,7 +8,6 @@ import swal from "sweetalert";
 import { SwalCommon } from "../../constants/SwalCommon";
 import { OrdersService } from "../../services/AdminOrder";
 import { productService } from "../../services/productService";
-
 export default function ProductManager() {
   const history = useHistory();
   const [data, setData] = useState([]);
@@ -53,7 +52,6 @@ export default function ProductManager() {
   function getData() {
     productService.getProduct(dataFill).then((response) => {
       if (response.status === 200) {
-        console.log(response);
         setData(response.data);
       }
     });
@@ -61,11 +59,9 @@ export default function ProductManager() {
   function deleteItem(id) {
     swal(SwalCommon.ALERT_DELETE_ALL).then((willDelete) => {
       if (willDelete) {
-        console.log(id);
         // swal(SwalCommon.COMING_SOON);
-
         productService
-          .deleteProduct(id)
+          .productTypeDelete(id)
           .then((response) => {
             if (response.status === 200) {
               swal(SwalCommon.ALERT_DELETE_COMPLETE).then(() => {
@@ -82,17 +78,15 @@ export default function ProductManager() {
     });
   }
   function handleCreate() {
-    history.push("/admin/register");
+    history.push("/product/product/register");
   }
 
   function handleEdit(id) {
-    history.push("/admin/edit/" + id);
+    history.push("/product/product/edit/" + id);
   }
-
-  function ChangePass(id) {
-    history.push("/changePassword/" + id);
+  function handleProType(id) {
+    history.push("/product/product/product-type/" + id);
   }
-
   return (
     <main>
       <div className="container-fluid">
@@ -226,16 +220,31 @@ export default function ProductManager() {
                           <td>{item.brand_name}</td>
                           <td>{item.category_name}</td>
                           <td>{item.total_quantity}</td>
-                          <td>{item.image}<img src={image} className="img-css" /></td>
-
                           <td>
-                            <Button
-                              className="btn-ct-light"
-                              variant="light"
-                              //  onClick={() => handleEdit(item.id)}
-                            >
-                              Detail
-                            </Button>
+                            <img src={item.image} className="img-css" />
+                          </td>
+
+                          <td className="w-25 text-center">
+                            <div className="row d-flex justify-content-center">
+                              {" "}
+                              <Button
+                                className="btn-ct-light mt-2 "
+                                variant="light"
+                                onClick={() => handleEdit(item.id)}
+                              >
+                                Detail
+                              </Button>
+                            </div>
+                            <div className="row d-flex justify-content-center">
+                              {" "}
+                              <Button
+                                className="btn-ct-light mt-4"
+                                variant="light"
+                                onClick={() => handleProType(item.id)}
+                              >
+                                Product type
+                              </Button>
+                            </div>
                           </td>
                           <td className="text-center">
                             <Button
@@ -245,10 +254,6 @@ export default function ProductManager() {
                             >
                               Delete
                             </Button>
-                            {/* <Form.Check
-                              onChange={() => handleSelected(index)}
-                              checked={selected[index]}
-                            /> */}
                           </td>
                         </tr>
                       );
@@ -269,7 +274,7 @@ export default function ProductManager() {
                 <Button
                   className="btn-ct-light"
                   variant="light"
-                  //  onClick={handleCreate}
+                  onClick={handleCreate}
                 >
                   Register
                 </Button>

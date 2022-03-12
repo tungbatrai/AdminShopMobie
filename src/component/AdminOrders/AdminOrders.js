@@ -147,10 +147,10 @@ export default function AdminOrders() {
   }, [isChangePage]);
 
   function getData(status) {
-    console.log(status);
+   
     OrdersService.getOrders(dataFill, status).then((response) => {
       if (response.status === 200) {
-        console.log(url);
+     
         setData(response.data);
       }
     });
@@ -158,7 +158,6 @@ export default function AdminOrders() {
   function ShippingOrer(id) {
     swal(SwalCommon.ALERT_QUENSTION_COMPLETED_SHIP).then((event) => {
       if (event) {
-        console.log(id);
         // swal(SwalCommon.COMING_SOON);
         const d1 = new Date().getTime();
         const a = ["ft", id, d1];
@@ -166,7 +165,6 @@ export default function AdminOrders() {
           ship_code: a.join(""),
         };
 
-        console.log(shipCode);
         OrdersService.OrderShip(id, shipCode)
           .then((response) => {
             if (response.status === 200) {
@@ -184,7 +182,7 @@ export default function AdminOrders() {
   function CompletedOrer(id) {
     swal(SwalCommon.ALERT_DELETE_ALL).then((event) => {
       if (event) {
-        console.log(id);
+
         swal(SwalCommon.COMING_SOON);
       }
     });
@@ -192,7 +190,6 @@ export default function AdminOrders() {
   function deleteOrder(id) {
     swal(SwalCommon.ALERT_DELETE_ALL).then((willDelete) => {
       if (willDelete) {
-        console.log(id);
         // swal(SwalCommon.COMING_SOON);
 
         OrdersService.OrdersDeleteList(id)

@@ -6,7 +6,7 @@ export const AdminService = {
   getAdmin,
   adminDetail,
   adminRegister,
-  // adminEdit,
+  adminEdit,
   deleteItem,
 };
 
@@ -17,15 +17,15 @@ function getAdmin(data) {
   );
 }
 function adminDetail(id) {
-  //return API.get(`${BASE_REST_API_URL}`);
+  return API.get(`${BASE_REST_API_URL}/${id}`);
 }
 function adminRegister(data) {
   return API.post(`${BASE_REST_API_URL}/signup`, data);
 }
 
-// function adminEdit(data) {
-//   return API.patch(`${BASE_REST_API_URL}`, data);
-// }
+function adminEdit(data) {
+  return API.put(`${BASE_REST_API_URL}`, data);
+}
 
 function deleteItem(id) {
   return API.delete(`${BASE_REST_API_URL}/${id}`);
