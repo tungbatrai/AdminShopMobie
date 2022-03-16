@@ -109,7 +109,7 @@ export default function RegisterModal({ show, handleCloseModal }) {
                           id="button"
                           onClick={() => handleMainPhotoInput()}
                         >
-                          input image
+                          Import image
                         </Button>
                       </div>
                     </div>

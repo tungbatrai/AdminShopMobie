@@ -295,7 +295,7 @@ export default function CategoryManager() {
                                               handleMainPhotoInput(index)
                                             }
                                           >
-                                            input image
+                                            Import image
                                           </Button>
                                         </div>
                                       </div>

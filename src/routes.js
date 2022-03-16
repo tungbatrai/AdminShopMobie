@@ -68,10 +68,6 @@ export const navigation = [
     url: "/comment",
   },
   {
-    mainMenu: "Sale",
-    url: "/product",
-  },
-  {
     mainMenu: "Rating",
     url: "/rating",
   },

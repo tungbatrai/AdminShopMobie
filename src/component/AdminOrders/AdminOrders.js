@@ -147,10 +147,8 @@ export default function AdminOrders() {
   }, [isChangePage]);
 
   function getData(status) {
-   
     OrdersService.getOrders(dataFill, status).then((response) => {
       if (response.status === 200) {
-     
         setData(response.data);
       }
     });
@@ -182,7 +180,6 @@ export default function AdminOrders() {
   function CompletedOrer(id) {
     swal(SwalCommon.ALERT_DELETE_ALL).then((event) => {
       if (event) {
-
         swal(SwalCommon.COMING_SOON);
       }
     });
@@ -238,9 +235,7 @@ export default function AdminOrders() {
             <div className="search">
               <div className="tcol-90 d-flex justify-content-center flex-column">
                 <div className="row mx-0">
-                  <div className="col-2 px-1 font-size11 align-self-center text-center">
-                    
-                  </div>
+                  <div className="col-2 px-1 font-size11 align-self-center text-center"></div>
                   <div className="col-10 px-1 d-flex">
                     <div className="tcol-20">
                       <DatePicker
@@ -419,9 +414,7 @@ export default function AdminOrders() {
                     <th>Ship code</th>
                     <th>Quantity</th>
                     <th>Status</th>
-
                     <th>Time order</th>
-                    <th>Detail</th>
                     <th>Delete</th>
                     {active && <th>Shipping status</th>}
                   </tr>
@@ -453,15 +446,6 @@ export default function AdminOrders() {
                             )}
                           </td>{" "}
                           <td>{item.time_order}</td>
-                          <td>
-                            <Button
-                              className="btn-ct-light"
-                              variant="light"
-                              //  onClick={() => handleEdit(item.id)}
-                            >
-                              Detail
-                            </Button>
-                          </td>
                           <td className="text-center">
                             <Button
                               className="btn-ct-light"

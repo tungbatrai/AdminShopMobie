@@ -94,7 +94,7 @@ export default function ProductRegisterDetail(props) {
           productService.productRegister(dataRegister).then((res) => {
             if (res.status === 200) {
               swal(SwalCommon.ALERT_SAVE_COMPLETE).then((value) => {
-                history.push("/admin");
+                history.push("/product/product");
               });
             }
           });
@@ -114,7 +114,7 @@ export default function ProductRegisterDetail(props) {
           productService.productUpdate(dataDetail, id).then((res) => {
             if (res.status === 200) {
               swal(SwalCommon.ALERT_SAVE_COMPLETE).then((value) => {
-                // history.push("/admin");
+                 history.push("/product/product");
               });
             }
           });
@@ -216,7 +216,7 @@ export default function ProductRegisterDetail(props) {
                                 id="button"
                                 onClick={() => handleMainPhotoInput()}
                               >
-                                input image
+                                Import image
                               </Button>
                             </div>
                           </div>
@@ -349,7 +349,7 @@ export default function ProductRegisterDetail(props) {
                                 id="button"
                                 onClick={() => handleMainPhotoInput()}
                               >
-                                input image
+                                 Import image
                               </Button>
                             </div>
                           </div>

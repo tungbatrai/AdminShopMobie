@@ -165,7 +165,7 @@ export default function ProductTypeRegister({ id, show, handleCloseModal }) {
                           id="button"
                           onClick={() => handleMainPhotoInput()}
                         >
-                          input image
+                           Import image
                         </Button>
                       </div>
                     </div>

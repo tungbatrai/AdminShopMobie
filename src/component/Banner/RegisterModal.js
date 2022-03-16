@@ -76,7 +76,7 @@ export default function RegisterModal({ show, handleCloseModal }) {
   return (
     <Modal show={show} onHide={handleCloseModal} size="lg" centered>
       <Modal.Header closeButton className="background-model">
-        <Modal.Title>Register Category</Modal.Title>
+        <Modal.Title>Brand Category</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="d-flex justify-content-center mt-4">
@@ -129,7 +129,7 @@ export default function RegisterModal({ show, handleCloseModal }) {
               <div className="col-6"></div>
               <div className="col-6 d-flex justify-content-end align-items-center">
                 <Button
-                  className="px-4 mx-3 btn-ct-light text-dark"
+                  className="px-4 mx-3 btn-ct-light text-dark w-25"
                   variant="light"
                   onClick={handleCloseModal}
                 >
