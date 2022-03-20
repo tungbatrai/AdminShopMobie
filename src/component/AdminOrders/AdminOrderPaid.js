@@ -2,30 +2,37 @@
 
 import { Button, Form, Table } from "react-bootstrap";
 import PaginationSection from "../common/PaginationSection";
-import { NavLink, useHistory } from "react-router-dom";
+import {
+  useParams,
+  lNavLink,
+  useHistory,
+  useRouteMatch,
+} from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import swal from "sweetalert";
-import { SwalCommon } from "../../constants/SwalCommon";
-import { CommentService } from "../../services/CommentService";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import swal from "sweetalert";
+import { SwalCommon } from "../../constants/SwalCommon";
+import { OrdersService } from "../../services/AdminOrder";
 import DateTime from "../common/DateTime";
-const initialSelect = new Array(10).fill(false);
-
-export default function Comment() {
+export default function AdminOrderPaid() {
+  let { url } = useRouteMatch();
   const history = useHistory();
   const [data, setData] = useState([]);
+
   const [dataFill, setDataFill] = useState({
     pageable: {
       pageNumber: 1,
       pageSize: 10,
     },
     product: "",
-    commenter: "",
+    brand: "",
+    user: "",
+    category: "",
     startFillDate: "",
     endFillDate: "",
+    status: "PAID",
   });
-
   const [endDate, setendDate] = useState("");
   const [startDate, setstartDate] = useState("");
   function handleChangeStartDate(date) {
@@ -135,19 +142,45 @@ export default function Comment() {
   }, [isChangePage]);
 
   function getData() {
-    CommentService.getList(dataFill).then((response) => {
+    OrdersService.getOrders(dataFill).then((response) => {
       if (response.status === 200) {
-        console.log(response.data);
         setData(response.data);
       }
     });
   }
-  function deleteData(id) {
+  function PaidOrder(id) {
+    swal(SwalCommon.ALERT_QUESTION_SHIP).then((event) => {
+      if (event) {
+        // swal(SwalCommon.COMING_SOON);
+        // const d1 = new Date().getTime();
+        // const a = ["ft", id, d1];
+        // let shipCode = {
+        //   ship_code: a.join(""),
+        // };
+        let setToStatus = {
+          status: "SHIPPING",
+        };
+        OrdersService.OrderShip(id, setToStatus)
+          .then((response) => {
+            if (response.status === 200) {
+              swal(SwalCommon.ALERT_SHIP).then(() => {
+                window.location.reload();
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+  }
+
+  function deleteOrder(id) {
     swal(SwalCommon.ALERT_DELETE_ALL).then((willDelete) => {
       if (willDelete) {
-        console.log(id);
         // swal(SwalCommon.COMING_SOON);
-        CommentService.deleteItem(id)
+
+        OrdersService.OrdersDeleteList(id)
           .then((response) => {
             if (response.status === 200) {
               swal(SwalCommon.ALERT_DELETE_COMPLETE).then(() => {
@@ -163,21 +196,25 @@ export default function Comment() {
       }
     });
   }
+  function detail(id) {
+    history.push(`/orders/edit/${id}`);
+  }
   return (
     <main>
       <div className="container-fluid">
         <div className="d-block d-xl-flex">
           <div className="tcol-25 tcol-lg-100 d-flex flex-column justify-content-between">
-            <h4 className="font-weight-bold mt-5">Comment list</h4>
+            <h4 className="font-weight-bold mt-5"> Order paid</h4>
             <div className="font-size12">
               Total &nbsp;<span>{data.totalElements}</span>&nbsp;case
             </div>
           </div>
+
           <div className="tcol-75 tcol-lg-100">
             <div className="search">
               <div className="tcol-90 d-flex justify-content-center flex-column">
                 <div className="row mx-0">
-                  <div className="col-2 text-center">Time</div>
+                  <div className="col-2 px-1 font-size11 align-self-center text-center"></div>
                   <div className="col-10 px-1 d-flex">
                     <div className="tcol-20">
                       <DatePicker
@@ -240,14 +277,40 @@ export default function Comment() {
                 </div>
                 <div className="row mx-0">
                   <div className="col-2"></div>
+
                   <div className="col-3">
                     <div className="row">
                       <div className="col-3 px-1 font-size11 align-self-center text-center">
-                        Product
+                        User
+                      </div>
+                      <div className="col-9 px-1 d-flex">
+                        <div class="d-flex bd-highlight mb-3 w-100">
+                          <div class="pt-3 bd-highlight w-100">
+                            {" "}
+                            <input
+                              type="text"
+                              className="form-control border-black "
+                              id="user"
+                              required
+                              onChange={handleChange}
+                            ></input>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="row mx-0">
+                  <div className="col-2"></div>
+                  <div className="col-3">
+                    <div className="row">
+                      <div className="col-3 px-1 font-size11 align-self-center text-center">
+                        Product name
                       </div>
                       <div className="col-9 px-1 d-flex">
                         <div class="d-flex bd-highlight mb-3">
                           <div class="pt-3 bd-highlight">
+                            {" "}
                             <input
                               type="text"
                               className="form-control border-black "
@@ -262,17 +325,38 @@ export default function Comment() {
                   </div>
                   <div className="col-3">
                     <div className="row">
-                      <div className="col-4 px-1 font-size11 align-self-center text-center">
-                        comment
+                      <div className="col-3 px-1 font-size11 align-self-center text-center">
+                        Brand
                       </div>
-                      <div className="col-8 px-1 d-flex">
+                      <div className="col-9 px-1 d-flex">
                         <div class="d-flex bd-highlight mb-3">
                           <div class="pt-3 bd-highlight">
                             {" "}
                             <input
                               type="text"
                               className="form-control border-black "
-                              id="commenter"
+                              id="brand"
+                              required
+                              onChange={handleChange}
+                            ></input>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-3">
+                    <div className="row">
+                      <div className="col-3 px-1 font-size11 align-self-center text-center">
+                        Category
+                      </div>
+                      <div className="col-9 px-1 d-flex">
+                        <div class="d-flex bd-highlight mb-3">
+                          <div class="pt-3 bd-highlight">
+                            {" "}
+                            <input
+                              type="text"
+                              className="form-control border-black "
+                              id="category"
                               required
                               onChange={handleChange}
                             ></input>
@@ -301,13 +385,17 @@ export default function Comment() {
               <Table bordered>
                 <thead>
                   <tr>
-                    <th className="text-center"></th>
-
-                    <th>User name</th>
-                    <th>Product name</th>
-                    <th>Content</th>
-                    <th>Time comment</th>
-                    <th>Delete</th>
+                    <th> </th>
+                    <th>Product Name</th>
+                    <th>User Name</th>
+                    <th>Brand Name</th>
+                    <th>Category Name</th>
+                    <th>Ship code</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
+                    <th>Time order</th>
+                    <th>Detail</th>
+                    <th>Shipping status</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -316,29 +404,35 @@ export default function Comment() {
                     data.data.map((item, index) => {
                       return (
                         <tr key={index}>
-                          <td className="text-center">
-                            {data.totalElements -
-                              (index +
-                                dataFill.pageable.pageSize *
-                                  (data.currentPage - 1))}
-                          </td>
-                          <td>{item.user_name}</td>
+                          <td>{data?.totalElements - index} </td>
                           <td>{item.product_name}</td>
-                          <td>{item.content}</td>
-                          <td>
-                            <DateTime
+                          <td>{item.user_name}</td>
+                          <td>{item.brand_name}</td>
+                          <td>{item.category_name}</td>
+                          <td>{item.ship_code}</td>
+                          <td>{item.quantity}</td>
+                          <td>{item.status}</td>
+                          <td>  <DateTime
                               format=""
                               type="datetime"
-                              date={item?.time_co9mment}
-                            />
-                          </td>
-                          <td>
+                              date={item?.time_order}
+                            /></td>
+                          <td className="text-center">
                             <Button
-                              className="btn-ct-light "
+                              className="btn-ct-light"
                               variant="light"
-                              onClick={() => deleteData(item.id)}
+                              onClick={() => detail(item.id)}
                             >
-                              Delete
+                              Detail
+                            </Button>
+                          </td>
+                          <td className="text-center">
+                            <Button
+                              className="btn-ct-light"
+                              variant="light"
+                              onClick={() => PaidOrder(item.id)}
+                            >
+                              Click to Shipping
                             </Button>
                           </td>
                         </tr>

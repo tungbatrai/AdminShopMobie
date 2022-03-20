@@ -14,11 +14,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import swal from "sweetalert";
 import { SwalCommon } from "../../constants/SwalCommon";
 import { OrdersService } from "../../services/AdminOrder";
-export default function AdminOrders() {
+import DateTime from "../common/DateTime";
+export default function AdminOrderShipping() {
   let { url } = useRouteMatch();
   const history = useHistory();
   const [data, setData] = useState([]);
-  const [active, setActive] = useState(true);
+
   const [dataFill, setDataFill] = useState({
     pageable: {
       pageNumber: 1,
@@ -30,6 +31,7 @@ export default function AdminOrders() {
     category: "",
     startFillDate: "",
     endFillDate: "",
+    status: "COMPLETED",
   });
   const [endDate, setendDate] = useState("");
   const [startDate, setstartDate] = useState("");
@@ -136,96 +138,25 @@ export default function AdminOrders() {
     );
   }
   useEffect(() => {
-    if (url === "/orders-shipping") {
-      const status = "SHIPPING";
-      getData(status);
-    } else {
-      const status = "COMPLETED";
-      getData(status);
-      setActive(false);
-    }
+    getData();
   }, [isChangePage]);
 
-  function getData(status) {
-    OrdersService.getOrders(dataFill, status).then((response) => {
+  function getData() {
+    OrdersService.getOrders(dataFill).then((response) => {
       if (response.status === 200) {
         setData(response.data);
       }
     });
   }
-  function ShippingOrer(id) {
-    swal(SwalCommon.ALERT_QUENSTION_COMPLETED_SHIP).then((event) => {
-      if (event) {
-        // swal(SwalCommon.COMING_SOON);
-        const d1 = new Date().getTime();
-        const a = ["ft", id, d1];
-        let shipCode = {
-          ship_code: a.join(""),
-        };
-
-        OrdersService.OrderShip(id, shipCode)
-          .then((response) => {
-            if (response.status === 200) {
-              swal(SwalCommon.ALERT_COMPLETED_SHIP).then(() => {
-                window.location.reload();
-              });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    });
+  function detail (id) {
+    history.push(`/orders/edit/${id}`);
   }
-  function CompletedOrer(id) {
-    swal(SwalCommon.ALERT_DELETE_ALL).then((event) => {
-      if (event) {
-        swal(SwalCommon.COMING_SOON);
-      }
-    });
-  }
-  function deleteOrder(id) {
-    swal(SwalCommon.ALERT_DELETE_ALL).then((willDelete) => {
-      if (willDelete) {
-        // swal(SwalCommon.COMING_SOON);
-
-        OrdersService.OrdersDeleteList(id)
-          .then((response) => {
-            if (response.status === 200) {
-              swal(SwalCommon.ALERT_DELETE_COMPLETE).then(() => {
-                getData();
-              });
-            } else {
-              alert("Delete fail !");
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    });
-  }
-  function handleCreate() {
-    history.push("/admin/register");
-  }
-
-  function handleEdit(id) {
-    history.push("/admin/edit/" + id);
-  }
-
-  function ChangePass(id) {
-    history.push("/changePassword/" + id);
-  }
-
   return (
     <main>
       <div className="container-fluid">
         <div className="d-block d-xl-flex">
           <div className="tcol-25 tcol-lg-100 d-flex flex-column justify-content-between">
-            <h4 className="font-weight-bold mt-5">
-              {" "}
-              {active ? <>Ship orders</> : <>Orders completed</>}
-            </h4>
+            <h4 className="font-weight-bold mt-5"> Order completed</h4>
             <div className="font-size12">
               Total &nbsp;<span>{data.totalElements}</span>&nbsp;case
             </div>
@@ -415,8 +346,7 @@ export default function AdminOrders() {
                     <th>Quantity</th>
                     <th>Status</th>
                     <th>Time order</th>
-                    <th>Delete</th>
-                    {active && <th>Shipping status</th>}
+                    <th>Detail</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -432,59 +362,21 @@ export default function AdminOrders() {
                           <td>{item.category_name}</td>
                           <td>{item.ship_code}</td>
                           <td>{item.quantity}</td>
-                          <td>
-                            {item.ship_code ? (
-                              <>{item.status}</>
-                            ) : (
-                              <>
-                                {item.status === "COMPLETED" ? (
-                                  <>COMPLETED</>
-                                ) : (
-                                  <>ORDERS</>
-                                )}
-                              </>
-                            )}
-                          </td>{" "}
-                          <td>{item.time_order}</td>
+                          <td>{item.status}</td>
+                          <td>  <DateTime
+                              format=""
+                              type="datetime"
+                              date={item?.time_order}
+                            /></td>
                           <td className="text-center">
                             <Button
                               className="btn-ct-light"
                               variant="light"
-                              onClick={() => deleteOrder(item.id)}
+                              onClick={() => detail(item.id)}
                             >
-                              Delete
+                              Detail
                             </Button>
                           </td>
-                          {active ? (
-                            <>
-                              <td className="text-center">
-                                {item.ship_code ? (
-                                  <>
-                                    {" "}
-                                    <Button
-                                      className="btn-ct-light"
-                                      variant="light"
-                                      onClick={() => CompletedOrer(item.id)}
-                                    >
-                                      Click to Completed
-                                    </Button>
-                                  </>
-                                ) : (
-                                  <>
-                                    <Button
-                                      className="btn-ct-light"
-                                      variant="light"
-                                      onClick={() => ShippingOrer(item.id)}
-                                    >
-                                      Click to Shipping
-                                    </Button>
-                                  </>
-                                )}
-                              </td>
-                            </>
-                          ) : (
-                            <></>
-                          )}
                         </tr>
                       );
                     })}

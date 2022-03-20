@@ -89,7 +89,7 @@ function Login() {
 
   function handleOnSubmit(e) {
     let formSubmit = e.currentTarget;
-    console.log(e);
+   // console.log(e);
     e.preventDefault();
     e.stopPropagation();
     if (!formSubmit.checkValidity()) {
@@ -131,9 +131,9 @@ function Login() {
               </Button>
             </Form>
           </Col>
-          <Col style={styles.sectionFoot} xs={12}>
+          {/* <Col style={styles.sectionFoot} xs={12}>
             <Link to="/password/forgot">Forgot pass?</Link>
-          </Col>
+          </Col> */}
         </Row>
       </Container>
     </>

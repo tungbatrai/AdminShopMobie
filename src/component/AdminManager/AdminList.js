@@ -18,7 +18,7 @@ export default function AdminList() {
       pageNumber: 1,
       pageSize: 10,
     },
-    role: "ADMIN",
+    role: "",
     phone: "",
     email: "",
     name: "",
@@ -86,9 +86,6 @@ export default function AdminList() {
     history.push("/admin/edit/" + id);
   }
 
-  function ChangePass(id) {
-    history.push("/changePassword/" + id);
-  }
 
   return (
     <main>

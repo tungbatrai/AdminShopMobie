@@ -87,8 +87,7 @@ export default function RegisterModal({ show, handleCloseModal }) {
                 <input
                   className="form-control txtInput w-100"
                   {...register(`name`, {
-                    required: true,
-                    maxLength: 10,
+                  
                   })}
                 />
               </div>
@@ -129,7 +128,7 @@ export default function RegisterModal({ show, handleCloseModal }) {
               <div className="col-6"></div>
               <div className="col-6 d-flex justify-content-end align-items-center">
                 <Button
-                  className="px-4 mx-3 btn-ct-light text-dark w-25"
+                  className="px-4 mx-3 btn-ct-light text-dark"
                   variant="light"
                   onClick={handleCloseModal}
                 >

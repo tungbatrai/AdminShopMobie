@@ -10,6 +10,7 @@ import { AdminService } from "../../services/AdminService";
 import { RattingService } from "../../services/RattingService";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import DateTime from "../common/DateTime";
 const initialSelect = new Array(10).fill(false);
 
 export default function RatingManager() {
@@ -284,7 +285,7 @@ export default function RatingManager() {
                     <th>User name</th>
                     <th>Product name</th>
                     <th>Rate</th>
-                    <th>time_rate</th>
+                    <th>Time rate</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -302,7 +303,14 @@ export default function RatingManager() {
                           <td>{item.user_name}</td>
                           <td>{item.product_name}</td>
                           <td>{item.rate}</td>
-                          <td>{item.time_rate}</td>
+                          <td>
+                            {" "}
+                            <DateTime
+                              format=""
+                              type="datetime"
+                              date={item?.time_rate}
+                            />
+                          </td>
                         </tr>
                       );
                     })}

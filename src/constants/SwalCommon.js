@@ -237,19 +237,53 @@ export const SwalCommon = {
     icon: "warning",
     button: "Confirm",
   },
-  ALERT_COMPLETED_SHIP: {
-    text: "Order completed!.",
-    icon: "success",
-    button: "Confirm",
-  },
-  ALERT_QUENSTION_COMPLETED_SHIP: {
-    text: "Would you like to complete the order?",
-    icon: "warning",
-    buttons: ["Cancel", "Confirm"],
-  },
+ 
   ALERT_WARNING_CFPASS: {
     text: "Password does not match. Please confirm again",
     icon: "warning",
     button: "Confirm",
+  },
+  ALERT_COMPLETED: {
+    text: "Order completed!.",
+    icon: "success",
+    button: "Confirm",
+  },
+  ALERT_QUENSTION_COMPLETED: {
+    text: "Would you like to complete the order?",
+    icon: "warning",
+    buttons: ["Cancel", "Confirm"],
+  },
+  ALERT_CONFIRM: {
+    text: "Confirm successid?",
+    icon: "success",
+    button: "Confirm",
+  },
+ 
+  ALERT_QUESTION_CONFIRM: {
+    text: "Has this order been confirm?",
+    icon: "success",
+    button: ["Cancel", "Confirm"],
+  },
+  ALERT_PAID: {
+    text: "Payment successid?",
+    icon: "success",
+    button: "Confirm",
+  },
+ 
+  ALERT_QUESTION_PAID: {
+    text: "Has this order been paid?",
+    icon: "success",
+    button: ["Cancel", "Confirm"],
+  },
+  ALERT_SHIP: {
+    text: "Payment successid?",
+    icon: "success",
+    button: "Confirm",
+  },
+ 
+  ALERT_QUESTION_SHIP: {
+    text: "Has this order been shipping?",
+    icon: "success",
+    button: ["Cancel", "Confirm"],
   },
 };

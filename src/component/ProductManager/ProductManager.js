@@ -186,8 +186,7 @@ export default function ProductManager() {
                     <th className="text-center"></th>
 
                     <th>Name</th>
-                    <th>tittle_sale</th>
-                    <th>percent_sale</th>
+
                     <th>Brand Name</th>
                     <th>Category Name</th>
                     <th>Quantity</th>
@@ -209,14 +208,6 @@ export default function ProductManager() {
                                   (data.currentPage - 1))}
                           </td>
                           <td>{item.name}</td>
-                          <td>{item.tittle_sale}</td>
-                          <td>
-                            {item.percent_sale ? (
-                              <>{item.percent_sale}%</>
-                            ) : (
-                              <></>
-                            )}
-                          </td>
                           <td>{item.brand_name}</td>
                           <td>{item.category_name}</td>
                           <td>{item.total_quantity}</td>
